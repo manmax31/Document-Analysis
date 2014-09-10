@@ -1,0 +1,17 @@
+Migraine is a debilitating neurological disorder characterized by mild to severe headache that is often
+accompanied by aura and other neurological symptoms. Among proposed mechanisms, dilation of the dural
+vasculature especially the middle meningeal artery (MMA) has been implicated as one component
+underlying this disorder. Several regulatory peptides from trigeminal sensory and sphenopalatine
+postganglionic parasympathetic fibers innervating these vessels have been implicated in the process
+including pituitary adenylate cyclase-activating polypeptide (PACAP). Although PACAP has been well
+described as a potent dilator in many vascular beds, the effects of PACAP on the dural vasculature are
+unclear. In the current study, we examined the ability of PACAP to dilate MMAs that were isolated from rats
+and pressurized ex vivo. PACAP38 potently dilated pressurized MMAs with an EC(50) of 1 pM. The PAC1
+receptor antagonist, PACAP(6-38), abolished MMA dilation caused by picomolar concentrations of PACAP.
+In contrast, cerebellar arteries isolated from the brain surface were 1,000-fold less sensitive to PACAP than
+MMAs. Although cerebellar arteries expressed transcripts for all three PACAP receptor subtypes (PAC1,
+VPAC1, and VPAC2 receptors) by RT-PCR analyses, MMA demonstrated only PAC1 and VPAC2 receptor
+expression. Further, multiple variants of the PAC1 receptor were identified in the MMA. The expression of
+PAC1 receptors and the high potency of PACAP to induce MMA vasodilation are consistent with their
+potential roles in the etiology of migraine.
+

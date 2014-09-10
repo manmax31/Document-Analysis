@@ -1,0 +1,10 @@
+package KMeans;
+
+public class Main 
+{
+	public staitc void main(String[] args)
+	{
+		String directory = "data/blog_data"
+	}
+
+}

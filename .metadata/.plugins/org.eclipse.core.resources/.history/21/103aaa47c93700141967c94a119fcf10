@@ -1,0 +1,47 @@
+package KMeans;
+
+public class Term 
+{
+	String term;
+	int docFreq;
+	int totalFreq;
+	
+	public Term(String term)
+	{
+		this.term = term;
+		docFreq   = 0;
+		totalFreq = 0;
+	}
+	
+	public String setTerm(String term)
+	{
+		return this.term;
+	}
+	
+	public int getDocFreq()
+	{
+		return this.docFreq;
+	}
+	public int getCollectionFreq()
+	{
+		return this.totalFreq;
+	}
+	
+	
+	
+	public String getTerm()
+	{
+		return this.term;
+	}
+	
+	public int getDocFreq()
+	{
+		return this.docFreq;
+	}
+	public int getCollectionFreq()
+	{
+		return this.totalFreq;
+	}
+	
+
+}

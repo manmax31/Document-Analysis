@@ -1,0 +1,29 @@
+n	Correctness	Accuracy	Nb
+2	1.00	1.00	12
+4	0.83	0.84	30
+6	0.70	0.82	121
+8	0.62	0.80	178
+12	0.59	0.79	202
+16	0.58	0.79	204
+20	0.58	0.78	205
+Figure 5: Results for sentences with or fewer words; Nb refers to the number of sentences in this category
+n	Correctness	Accuracy
+1	0.58	0.78
+2	0.60	0.79
+4	0.62	0.81
+8	0.69	0.85
+12	0.68	0.86
+20	0.70	0.87
+30	0.73	0.89
+Figure 6: Results for -best analyses
+the number of dependency arcs which are correctly found (same head and daughter nodes) in the best parse for each sentence to the number of arcs in the entire test corpus. We also report the percentage of sentences for which we find the correct dependency tree (correctness). For our test corpus, we obtain an accuracy of 0.78 and a correctness of 0.58. The average transduction time per sentence (including initialization of the parser) is 0.29 s. Figure 5 shows the dependence of the scores on sentence length. As expected, the longer the sentence, the worse the score.
+We can obtain the n-best paths through the FST; the scores for n-best paths are summarized in Figure 6. Since the scores keep increasing, we believe that we can further improve our 1-best results by better choosing the correct path. We intend to adapt the FSTs to use probabilities of attaching particular supertags to other supertags (rather than uniform weights for all attachments) in order to better model the probability of different analyses. Another option, of course, is bilexical probabilities. 6 Discussion and Outlook
+We have presented PARSLI, a system that takes a high-level specification of domain lexical semantics and generates a finite-state parser that transduces input to the specified semantics. PARSLI uses Tree Adjoining Grammar as an interface between syntax and lexical semantics. Initial evaluation results are encouraging, and we expect to greatly improve on current 1-best results by using probabilities of syntactic combination. While we have argued that many applications do not need a fully recursive parser, the same approach to using TAG as an intermediate between application semantics and syntax can be used in a chart parser; for a chart parser using the FS machines discussed in this paper, see (Nasr et al., 2002).
+References
+Michael Collins. 1997. Three generative, lexicalised models for statistical parsing. In Proceedings of the 35th Annual Meeting of the Association for Computational Linguistics, Madrid, Spain, July.
+Bob Coyne and Richard Sproat. 2001. WordsEye: An automatic text-to-scene conversion system. In SIGGRAPH 2001, Los Angeles, CA.
+Robert Frank. 2001. Phrase Structure Composition and Syntactic Dependencies. MIT Press, Cambridge, Mass.
+Aravind K. Joshi and Yves Schabes. 1991. Tree- adjoining grammars and lexicalized grammars. In Maurice Nivat and Andreas Podelski, editors, Definability and Recognizability of Sets of Trees. Elsevier.
+Dekang Lin. 1994. PRINCIPAR—an efficient, broad-coverage, principle-based parser. In coling94, pages 482–488, Kyoto, Japan.
+Alexis Nasr, Owen Rambow, John Chen, and Srinivas Bangalore. 2002. Context-free parsing of a tree adjoining grammar using finite- state machines. In Proceedings of the Sixth International Workshop on tree Adjoining Grammar and related Formalisms (TAG+6), Venice, Italy.
+Mark-Jan Nederhof. 2000. Practical experiments with regular approximation of context- free languages. Computational Linguistics, 26(1):17–44.

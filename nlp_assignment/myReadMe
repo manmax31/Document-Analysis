@@ -1,0 +1,3 @@
+ReadMe:
+1) Copy the Files CNCValue.java, SubItemMatcher.java, Term.java to src/documentAnalysis/nlp/
+2) Run CNCValue.java. It will the NC Algorithm and will display the terms that are ranked by their NC values in descending order.

@@ -1,0 +1,30 @@
+In contrast to TITLE1, TITLE2 by AUTHOR2
+uses Lisp as the underlying programming lan-
+guage. With 180 pages it is a rather short book.
+Besides parsing and generation, it covers ma-
+chine translation as an application of CL. Un-
+fortunately, the book is already 12 years old.
+Figure 1: English translation of a Polibox para-
+graph
+means, as explained below.
+While Polibox will eventually generate both
+German and English text, the first prototype is restricted to German. For illustration, figure 1 shows the (anonymized) English translation of a short sample paragraph as selected by the user. In this case, the user had asked for a recent book covering parsing and generation, and this is the second book suggested by Polibox; the first was very similar but based on Prolog.
+2.2 Architecture
+Polibox is a web application that features elements of "adaptive hypertext" as classified by
+(De Bra 1999): Via a standard web browser, the user interacts with the system, which produces HTML pages on-the-fly in response to user's choices. On the welcome page, the user selects from a range of checkboxes the features she wishes to find in a CL textbook. The web server submits the request to the generation module, which implements a variant of the "standard pipeline model" of NLG (Dale, Reiter 2000):
+1. Content Selection matches the target features against the book database and determines a range of suitable books (max. four'), a ranking of these candidates, communicative goals, and for each book those DB attributes that are to be actually verbalized. These are being mapped to propositions.
+2. Text Planning maps a communicative goal and a set of propositions (corresponding to
+a single book description) to a `rhetorical tree' that specifies coherence relations between propositions and sub-trees, as well as a partial order for presenting the information.
+'This limit is an arbitrary choice and can be changed without affecting the program.
+3. Sentence Planning maps the partially- ordered rhetorical tree to a fully linearized
+sequence of sentence specifications linked
+by `conjunctive relations' (Martin 1992).
+4. Surface realization maps each sentence specification to a German sentence.
+Content selection, text planning, and sentence planning are discussed in more detail below. As for surface realization, we currently employ two different approaches: A template- based generation using the TG/2 module (Busemann 1998), and a "deep" generation using the KPML multilingual generation environment (Bateman 1997). The goal is to eventually evaluate the relative merits of both approaches for the kind of application realized in Polibox; for the purposes of this paper, we describe only the "deep" variant. Hence, the sentence planner produces expressions in the Sentence Plan Language (Kasper 1989), which KPML maps to linguistic output.
+2.3 Implementation
+Polibox is being implemented in Common Lisp. While both alternative surface realizers run within Allegro CL runtime images, the remaining modules are built with the freely available CMU Common Lisp (CMUCL URL). Throughout the prototype, the description logic LOOM and its reasoning services (LOOM URL) are utilized where possible. Non-deterministic algorithms (in text planning) are implemented with Screamer (Siskind, McAllister 1993), which is embedded in Common Lisp. The web server is the Common Lisp Hypermedia Server (CLHTTP URL).
+3 Content selection and text planning
+3.1 Retrieve candidate books
+The "database" of book entries is stored in
+the LOOM KR system, where the terminolog-
+ical component (TBox) corresponds to a DB schema, and the assertional component (ABox) corresponds to DB entries. In fact, the TBox, as usual in description logics, holds knowledge about subsumption relationships, in our application a hierarchy of CL topics (so that the user can ask for `parsing' and will also find books about `LR-parsing', etc.). When the user has

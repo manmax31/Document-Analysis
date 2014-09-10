@@ -1,0 +1,223 @@
+/**
+ * 
+ */
+package ml.classifier;
+
+/**
+ * @author manabchetia
+ *
+ */
+import java.util.ArrayList;
+
+import text.UnigramBuilder;
+
+public class Kmeans {
+	 public int k;
+	 public TopicClasses[] tclass;
+	 public int num_of_top;
+     public Kmeans(int K, ArrayList<fileVector> fvs,double threshold){
+    	 this.k = K;
+    	 this.tclass = new TopicClasses[K];
+    	 this.num_of_top = fvs.get(0).num_of_top;
+    	 for(int i = 0;i<k;i++){
+    		 tclass[i] = new TopicClasses(num_of_top);
+    	 }
+    	 int[] kindex = new int[k];
+    	 boolean[] markedindex = new boolean[fvs.size()];
+    	 for (int i=0;i<fvs.size();i++){
+    		markedindex[i] = false;
+    	 }
+    	 for (int i=0;i<k;i++){
+    		 int g = 0;
+    			g= Math.round((float)Math.random()*fvs.size())-1;
+    		 //
+    		 if(g ==-1){
+    			 g =0;
+    		 }
+    		 //System.out.println(g+"=======");
+    		 while(markedindex[g]){
+    			 
+    			 g = Math.round((float)Math.random()*fvs.size())-1;
+        		 if(g ==-1){
+        			 g =0;
+        		 }
+    			 //System.out.println(g);
+    		 }
+    		 kindex[i] = g;
+    		 markedindex[g] = true;
+    	 }
+    	 for(int i=0;i<k;i++){
+    		 //System.out.println(fvs.get(kindex[i]).num_of_top);
+    		 tclass[i].center =  fvs.get(kindex[i]);
+    	 }
+    	 boolean stopcondition = false;
+    	 int iteration = 0;
+    	 while (!stopcondition){
+    		 iteration++;
+        	 for(int i=0;i<k;i++){
+        		 tclass[i].files =  new ArrayList<fileVector>();
+        	 }
+    		 for(fileVector fv : fvs){
+    			 double lagrestsimilarity = this.similarity(fv, tclass[0].center);
+    			 int lagrestindex = 0;
+    			 for(int i = 1; i<k ;i++){
+    				 double d = this.similarity(fv, tclass[i].center);
+    				 if (d == -1.0) {System.out.println("similarity error");}
+    				 if(d>lagrestsimilarity){
+    					 lagrestsimilarity = d;
+    					 lagrestindex = i;
+    				 }
+    			 }
+    			 tclass[lagrestindex].files.add(fv);
+    		 }
+    		 boolean satisified = true;
+			 	for(int i = 0; i<k ;i++){
+				  fileVector fc = new fileVector(num_of_top);
+				  for (fileVector fvc :  tclass[i].files){
+					  for(int j = 0;j<num_of_top;j++){
+						  fc.tfidf[j] += fvc.tfidf[j];
+					  }
+				  }
+				  	for(int j = 0;j<num_of_top;j++){
+					   fc.tfidf[j] = fc.tfidf[j]/tclass[i].files.size();
+				  	}
+				  
+				  if(this.similarity(fc, tclass[i].center)<threshold){
+					  similarity(fc, tclass[i].center);
+					  satisified = false;
+				  }
+				  tclass[i].center = fc;
+			 	}
+			 if(satisified == true){
+				 stopcondition = true ;
+				 System.out.println("iteration = " + iteration);
+			 }
+    			 
+    	}//endwhile
+    	 double[] top5simi = new double [5];
+    	 for(int k = 0;k<5;k++){
+    		 top5simi[k] = 0.0;
+    	 }
+    	 for(int i = 0; i<k ;i++){
+    		 double temp2 =0.0;
+    		 String tempi2 = new String();
+    		
+    		 for (fileVector fvc :  tclass[i].files){
+    			 int m =0;
+    			 for(m =0;m<5;m++){
+    				 if(similarity(fvc,tclass[i].center)> top5simi[m]){
+    					 top5simi[m] =  similarity(fvc,tclass[i].center);
+    					 tclass[i].top5index[m]= fvc.filename;
+    					}
+ 				 	for(int g=0;g<4;g++){
+ 				 		if(top5simi[g]>top5simi[g+1])
+ 						 temp2 = top5simi[g];
+ 						 tempi2 = tclass[i].top5index[g];
+ 						 top5simi[g] =  top5simi[g+1];
+ 						 tclass[i].top5index[g] = tclass[i].top5index[g+1];
+ 						top5simi[g+1] = temp2;
+ 						tclass[i].top5index[g+1] = tempi2;
+ 					 	}
+    				 
+    			 }
+    			 if(m<5){
+				 
+				 
+
+    			 }
+    		 
+    		 }
+    	 }
+    		 
+    		 
+} 	 
+     public double similarity(fileVector fv1,fileVector fv2){
+    	 double s = -1.0; 
+    	 double s2 = 0.0;
+    	 double d1 = 0.0;
+    	 double d2 = 0.0;
+    	 for(int i=0;i<fv1.num_of_top;i++){
+    		 d1 += fv1.tfidf[i]*fv1.tfidf[i];
+    		 d2 += fv2.tfidf[i]*fv2.tfidf[i];
+    		 s2 += (fv1.tfidf[i]*fv2.tfidf[i]);
+    	 }
+    	 if(d1==0.0|d2==0.0){
+    		 return 0.0;
+    	 }
+    	 s = s2/(Math.sqrt(d1)*Math.sqrt(d2));
+    	 
+    	 
+    	 return s;
+     }
+     
+ 
+     public static void main(String[] args) {
+    	// UnigramBuilder UB = new UnigramBuilder("data/blog_data/" /* data source */, 
+  		//		/* num top words */100, /* remove stopwords */true);
+//   	 UnigramBuilder UB = new UnigramBuilder("data/two_newsgroups/" /* data source */, 
+// 				/* num top words */500, /* remove stopwords */true);
+    	 UnigramBuilder UB = new UnigramBuilder("data/blog_data_test/" /* data source */, 
+  				/* num top words */100, /* remove stopwords */true);
+    	 int nok = 3;
+    	// System.out.println(UB._fvs.size());
+    	 Kmeans km = new Kmeans(nok, UB._fvs, 0.99);
+    	 double[] acc = new double[nok];
+    	 double avacc =0.0;
+    	 int allnf =0;
+    	      for(int i = 0; i<nok ;i++){
+    	     	 String[] classes = new String[100];
+    	    	 int[] countclasses = new int[100];
+    	    	 int classnumber = 0;
+    	    	 for(int j = 0;j<100;j++){
+    	    		 classes[j] = new String();
+    	    		 countclasses[j] = 0;
+    	    	 }
+    	    	  System.out.println("files in class " +i+": (" + km.tclass[i].files.size() +" files)");
+    	    	  for(int g = 0;g<5;g++){
+    	    		  //System.out.print(km.tclass[i].top5index[g].subSequence(0, km.tclass[i].top5index[g].indexOf("_"))+", ");
+    	    		  System.out.println(km.tclass[i].top5index[g]);
+    	    	  }
+    	    	  System.out.println();
+    	    	  for(fileVector fv : km.tclass[i].files){
+    	    		// System.out.print( fv.markedclass+", ");
+    	    		System.out.print( fv.markedclass+", ");
+    	    		 int thisclass = 0;
+    	    		 for(thisclass = 0; thisclass<classnumber;thisclass++){
+    	    			 if(fv.markedclass.equals(classes[thisclass])){
+    	    				 break;
+    	    			 } 
+    	    		 }
+    	    		 if(thisclass==classnumber){
+    	    			 classes[classnumber] = fv.markedclass;
+    	    			 countclasses[classnumber]++;
+    	    			 classnumber++;
+    	    		 }
+    	    		 else{
+    	    			 countclasses[thisclass]++;
+    	    		 }
+    	    		 
+    	    	  }
+    	    	  System.out.println();
+    	    	  for(int j= 0;j<classnumber;j++){
+    	    	  System.out.println(classes[j]+" = " + countclasses[j]);
+    	    	  }
+    	    	  int best_class = 0;
+    	    	  for(int j= 0;j<classnumber;j++){
+    	    		  if(countclasses[j]>countclasses[best_class]){
+    	    			  best_class = j;
+    	    		  }  
+    	    	  }
+    	    	  acc[i] = 0.0;
+    	    	  acc[i] = (double)countclasses[best_class]/(double)km.tclass[i].files.size();
+    	    	  avacc +=acc[i]*(double)km.tclass[i].files.size(); 
+    	    	  allnf += km.tclass[i].files.size();
+    	    	  System.out.println("Accuracy on class " +classes[best_class]  +" :"  + acc[i]);
+    	      }
+    	      	 
+    	         avacc = avacc/(double)allnf;
+    	         System.out.println("average Accuracy on all class :"  + avacc);
+     }
+     
+     
+     
+}

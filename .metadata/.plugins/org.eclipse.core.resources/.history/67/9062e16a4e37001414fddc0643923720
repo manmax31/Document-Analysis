@@ -1,0 +1,21 @@
+/**
+ * 
+ */
+package ml.classifier;
+
+/**
+ * @author manabchetia
+ *
+ */
+public class KMeans 
+{
+
+	/**
+	 * Here execution begins
+	 */
+	public static void main(String[] args) 
+	{
+		
+	}
+
+}

@@ -1,0 +1,46 @@
+Compilation
+===
+
+Use Eclipse (if you have problems, use Google or ask 
+a classmate who attended the lab for help)
+
+Make sure stanford-corenlp-3.4.jar and stanford-corenlp-3.4-models.jar are in the classpath. You can also download them from Wattle or http://nlp.stanford.edu/software/corenlp.shtml.
+
+
+Familiarize yourself with the starter code in src
+===
+
+(1) Look at the data structures in documentAnalysis.nlp.struct.
+
+(2) Look at NLPPipelineDemo.main() in documentAnalysis.nlp. Run the demo code with the provided documents in data.
+Could you change the code to print POS tags along with the word surface forms?
+
+(3) Look at RegEx.regularExpressionPractice().
+How would you modify the code so that you could rank the substrings matching the pattern “c+d” according to their frequencies?
+
+(4) Check the classes in documentAnalysis.nlp.utils. How would you reuse or modify them for your implementation of C-value? Or do you have a more efficient solution?
+
+
+
+Implementation of C-Value
+===
+
+(5) Design and check your implementation of filters.
+    
+(6) How do you represent terms of different lengths so that you can compare them easily?
+
+(7) In order to rerun your node with our new dataset easily in the lab, please make sure that the frequency threshold and the term length are adjustable parameters. And Your main program should have one parameter indicating the file path of the data directory. 
+    
+
+Implementation of NC-Value
+===
+
+(8) Which data structures are appropriate for context words and their association to the terms?
+
+
+
+
+Useful Resources
+=============
+http://docs.oracle.com/javase/7/docs/api/java/util/Collections.html
+http://www.beingjavaguys.com/2013/03/java-collection-framework.html

@@ -1,0 +1,51 @@
+package KMeans;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import util.FileFinder;
+
+public class Files2BigDictionary 
+{
+	Map<String, HashMap> bigFileDictionary = new HashMap<String, HashMap>(); // {fileName1: {wordFreqMap}, ...}
+	
+	
+	public String getFileName(File path)
+	
+	
+	public static void filesToHashMap(String directory, boolean ignore_stop_words)
+	{
+		ArrayList<File> files = FileFinder.GetAllFiles(directory, "", true);
+		System.out.println("Found " + files.size() + " files.");
+		
+		int file_count = 0;
+		
+		for (File file : files) 
+		{
+			
+			String       file_content  = DocUtils.ReadFile(file);
+			List<String> tokensList    = DocUtils.getTokensList(file_content, ignore_stop_words);
+			Set<String>  tokensSet     = DocUtils.getTokensSet(tokensList);
+			
+			Map<String, Integer> wordFreqMap = tokensList.parallelStream().flatMap(s -> Arrays.asList(s.split(" ")).stream()).
+		            collect(Collectors.toConcurrentMap(w -> w.toLowerCase(), w -> 1, Integer::sum));
+			
+			System.out.println(file);
+		}
+	}
+	
+
+	public static void main(String[] args) 
+	{
+		String directory  = "data/blog_data/";
+		filesToHashMap(directory, true);
+
+	}
+
+}

@@ -1,0 +1,16 @@
+package KMeans;
+
+public class Term 
+{
+	String word;
+	int docFreq;
+	int collectionFreq;
+	
+	public Term(String word)
+	{
+		this.word = word;
+		docFreq   = 0;
+		collectionFreq = 0
+	}
+
+}

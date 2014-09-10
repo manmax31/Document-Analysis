@@ -1,0 +1,19 @@
+Polibox: Generating descriptions, comparisons, and
+recommendations from a database
+Manfred Stede
+Inst. fur Linguistik / Angewandte Computerlinguistik
+Universitat Potsdam
+P.O. Box 601553
+14415 Potsdam
+Germany
+stede@ling.uni-potsdam.de
+Abstract
+We describe our ongoing work on "Polibox", a web-based text generator producing adap-
+tive hypertext from a product database, currently one of computational linguistics textbooks. When given a specification of a desired ideal book, Polibox selects suitable candidates from the database, and presents them one-byone to the user. Books are described, compared to one another, and, under the right circumstances, actively recommended. This project note concentrates on the stages of content selection, text planning and sentence planning. 1 Introduction
+Work in automated natural language generation (NLG) has typically focused on specific types of text, such as advices (e.g., on correcting program errors), reports (e.g., of project activities), or persuasions (e.g., to stop smoking). The "Polibox" generator, whose first prototype is just being completed, combines in a single system three different discourse purposes: describe an object, compare an object to another, evaluate one object with respect to another. A mixture of these purposes can be found in discourses that inform about certain products and possibly involve recommendations on choosing one rather than the other. In a typical scenario, a client asks an expert about a particular type of product suitable for the client's needs, and the expert responds with descriptions of several candidates, compares them, and possibly singles out one candidate as especially well-suited.
+While in general this amounts to a dialogue application, Polibox merely handles the text generation side. The client thus provides a description of their needs via a menu, and Polibox selects suitable products and generates descriptions. However, rather than combining them all into a single text, individual descriptions are kept distinct, and the user can select the order in which they are presented. This takes up the idea of "adaptive hypertext" realised in ILEX (Mellish et al. 1998) or Peba-II (Milosavljevic 1997).
+The following section describes the overall architecture of Polibox, and subsequent sections explain in more detail how content selection, text planning, and sentence planning are being done. Finally, Polibox is compared to related earlier research.
+2 System overview
+2.1 Application scenario
+Polibox implements the scenario of a client (e.g.,
+a student) inquiring about a textbook suitable for his current interests and capabilities. The subject matter realized in the prototype is computational linguistics, i.e., a database with information on 25 CL texts is the basis for the generator to select information from and present it. The student specifies topics they want to see covered by the book, the language, the programming language used, the desired presence of code examples and exercises. Polibox determines a small number of books that match the requirements and generates a description of the first, accompanied by hyperlinks to further descriptions, if any. When the student selects a link, a text on the second title is generated and presented, and this description is very likely to contain explicit comparisons to the book that has been presented before. Hence, all but the first book description pay attention not only to the "target features" specified by the user, but also to the prior descriptions, as stored in the discourse history. Furthermore, the generator may decide that one book is a clear favourite and actively recommend this one, using various

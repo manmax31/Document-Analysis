@@ -1,0 +1,21 @@
+<epsilon>:FE=Item	6 	<epsilo>:)	7
+0	<epsilon>:(	1	A_NXG:GF=0	2
+A_NXN:GF=0
+<epsilon>:FE=Customer	3	ordered:transaction	4	A NXG:GF=1	5
+A_NXN:GF=1
+Figure 4: FST corresponding to TAG tree in Figure 3
+S
+ordered
+Figure 3: TAG tree for word ordered; the downarrow indicates a substitution node for the nominal argument
+4 Constructing the Parser
+In our approach, each elementary FST describes the syntactic potential of a set of (syntactically similar) words (as explained in Section 3). There are several ways of associating words with FSTs. Since FSTs correspond directly to supertags (i.e., trees in a TAG grammar), the basic way to achieve such a mapping is to list words paired with supertags, along with the desired semantic associated with each argument position (see Figure 1). The parser can also be divided into a lexical machine which transduces words to classes, and a syntactic machine, which transduces classes to semantics. This approach has the advantage of reducing the size of the overall machine since the syntax is factored from the lexicon.
+The lexical machine transduces input words to classes. To determine the mapping from word to supertag, we use the lexical probability where is the word and the class. These are derived by maximum likelihood estimation from a corpus. Once we have determined for all words which classes we want to pair them with, we create a disjunctive FST for all words associated with a given supertag machine, which transduces the words to the class name. We replaces the class’s FST (as determined by its associated supertag(s)) with the disjunctive head FST. The weights on the lexical transitions are the nega tive logarithm of the emit probability	(ob-
+tained in the same manner as are the lexical probabilities).
+For the syntactic machine, we take each elementary tree machine which corresponds to an initial tree (i.e., a tree which need not be adjoined) and form their union. We then perform a series of iterative replacements; in each iteration, we replace each arc labeled by the name of an elementary tree machine by the lexicalized version of that tree machine. Of course, in each iteration, there are many more replacements than in the previous iteration. We use 5 rounds of iteration; obviously, the number of iterations restrict the syntactic complexity (but not the length) of recognized input. However, because we output brackets in the FSTs, we obtain a parse with full syntactic/lexical semantic (i.e., dependency) structure, not a “shallow parse”.
+This construction is in many ways similar to similar constructions proposed for CFGs, in particular that of (Nederhof, 2000). One difference is that, since we start from TAG, recursion is already factored, and we need not find cycles in the rules of the grammar.
+5 Experimental Results
+We present results in which our classes are defined entirely with respect to syntactic behavior. This is because we do not have available an important corpus annotated with semantics. We train on the Wall Street Journal (WSJ) corpus. We evaluate by taking a list of 205 sentences which are chosen at random from entries to WORDSEYE made by the developers (who were testing the graphical component using a different parser). Their average length is 6.3 words. We annotated the sentences by hand for the desired dependency structure, and then compared the structural output of PARSLI to the gold standard (we disregarded the functional and semantic annotations produced by PARSLI). We evaluate performance using accuracy, the ration of
+NP Arg0
+VP
+NP Arg1
+V

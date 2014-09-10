@@ -1,0 +1,37 @@
+with the rules to each parsing action and decide which step to continue.
+Therefore the extended GLR algorithm handles the conflicts with two steps: (1). The reduce action is always executed first, then the shift action. (2). When more than one reduce actions satisfy the conditions, probability and frequency decide the order of these reduce actions.
+3.2 Parsing Actions and Parsing Process
+3.2.1 Parsing Table and Actions
+Figure 2: the parsing table
+The ACTION table contains four action sub-tables: Sh1, Re1, Re-Sh and Accept. They stand for shift part, reduce part, reduce-shift part and accept part respectively. Because the error action is similar to accept action, it is not explained here. The Re-Sh part is the key part in the table. It contains multiple entries while the others have no conflicts. In the Re-Sh part, the rules are firstly arranged according to the probabilities and then compared based on the frequencies. The maximum probability is put on the top. This sequence continues until the last rule with minimum probability. According to the order of Re-Sh sub-table, the parsing program is transformed to the corresponding state of the stack. This order suits for the full parsing. But to the base noun phrases identification, frequency is firstly compared.
+Since the ambiguities and conflicts existed in the Re-Sh sub-table, we give a limit that no more than 20 entries in the Re-Sh part. From the experiment results, it is better to select 20 rules as the branch limit in the parsing process
+because it not only permits the multiple entries, but also fits for the performance efficiency of our program.
+Since the parser uses PCFG*, it has strong control to handle action conflicts and rule ambiguities. The parsing process need to prune the meaningless parsing branches. Excessive pruning may cause the loss of some grammar rules and add the error opportunities. Reasonable pruning can improve efficiency.
+3.2.2 the Parsing Process
+We give the following the symbols definition and interpretation to explain the parsing process.
+Let ‘#’ denotes the start and the end of the input Chinese sentence. The system contains a list of stacks simultaneously. The parsing table contains two elements: state nodes and symbol nodes. The parsing stack includes state stack (StateStack, name in the program), symbol state (SymbolStack) and input stack (InputStack) whose pointers are ps, pb and pi respectively.
+Following algorithm is established for the shift-reduce parsing process.
+Input:
+An input Chinese words sequence W in which each word has its part-of-speech and a parsing table produced by grammar rules;
+Output:
+If the input word sequence W satisfies the grammar rules and is accepted according to the parsing table, then output the parsing result of W, otherwise give error result;
+Main Loop:
+It mainly consists of four parts: shift, reduce, accept and error in the parsing process.
+Repeat
+Begin
+s :_ *ps++; //s is current state
+b :_ *pb++; //to the next symbol
+c :_ *pi++; //to the next input word
+1) Pop | | symbols from top of the symbol stack, and push the left side symbol A to the symbol state;
+2) Pop | | symbols from top of the state stack, and push s*
+The parsing table consists of two sub-tables: ACTION table and GOTO table that are constructed by the grammar rules. The GOTO table is not different from GLR table. Just ACTION table is modified a little. Figure 2 shows the structure of the parsing table.
+State	ACTION			GOTO
+	X1, X2,	, Xi ,	#			Y1,	,
+				Yj
+S0	Sh1			
+S1		Re1		
+	Re-Sh			
+Sn			Accept	
+if	Action[reduce	rule
+] = reduce(),
+then begin

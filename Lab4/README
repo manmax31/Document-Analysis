@@ -1,0 +1,57 @@
+Compilation
+===
+
+Use Eclipse (if you have problems, use Google or ask 
+a classmate who attended the lab for help)
+
+
+Familiarize yourself with Naive Bayes
+===
+
+(1) Look at ml.classifier/vote.arff... what does it contain?
+
+(2) Look at ml.classifier/vote_sparse.arff... specifically the
+    last six lines... what is different from (1)?  Could the entire
+    file be encoded this way?  What would be the advantage?
+
+(3) Run ml.classifier.naiveBayes.main()... what is it showing you?
+    How well is it doing?
+
+
+Get Naive Bayes working with new text data
+===
+
+(4) Look at the data in the data/ directory... there are three different
+    subdirectories, what is in each?  What could be features?  What could
+    the class be?
+    
+(5) Look at text.UnigramBuilder.main()... what does it load, what does it
+    build?  What happens when you change the parameters?
+    
+(6) Look at text.ArffDataBuilder... you will use this to construct an ARFF
+    file from the raw data.  There are two points marked TODO... fill
+    them in with the required code.
+    
+(7) Run the code... it should dump a file in the ml.classifier directory.
+    Change NaiveBayes.main() to load this new file (it is currently 
+    commented out).  Does the code run?  How well does it do?
+
+(8) Run the code again... do the results change?  Why?  Look at main()
+    for hints.
+
+(9) How does training performance most often compare to test performance
+    across different runs?  Why? 
+
+(10) Experiment with ArffDataBuilder... try changing the number of 
+    words used.  Also try turning stop word removal on and off with
+    the same number of word features.  How do these changes affect
+    the performance (running time / accuracy)?
+
+(11) Switch the ArffDataBuilder.DATA_SRC to "newsgroups" rather than
+    "two_newsgroups".  Now we're doing multiclass classification.
+    How does NaiveBayes perform?  Is this good for eight classes?
+    
+(12) One can still do a lot better with Naive Bayes by continuing to
+    tweak it.  Just Google for "naive Bayes newsgroups" and you should
+    find plenty of papers providing improvements.  Identify at least
+    one additional enhancement you can make to Naive Bayes.

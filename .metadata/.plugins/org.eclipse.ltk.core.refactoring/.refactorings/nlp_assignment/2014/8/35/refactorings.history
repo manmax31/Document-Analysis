@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;nlp_assignment/myReadMe.txt&apos; to &apos;myReadMe&apos;" description="Rename resource &apos;myReadMe.txt&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="myReadMe.txt" name="myReadMe" stamp="1409220352740" updateReferences="true"/>
+</session>

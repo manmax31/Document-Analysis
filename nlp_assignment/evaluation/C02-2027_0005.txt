@@ -1,0 +1,32 @@
+open-class words and connectives, and map-
+ping proposition participants to thematic roles.
+Here, interactions between choosing connectives and determining the verb complex can be accounted for. Once again, the communicative goal and information from the discourse memory enter these decisions as parameters, e.g. for choosing a connective that marks a proposition as given (cf. the difference between since and because). For the lexicalisation step, we use an extended version of the `Moose' module (Stede 1999).
+5 Related work
+The merge between NLG and adaptive hypertext was introduced by the ILEX (Mellish et al. 1998) and Peba-II (Milosavljevic 1997) systems, and with respect to user interface, Polibox adopts the same general approach as these two systems. However, we have put an emphasis on the variety of communicative goals that can be pursued in Polibox, resulting in a broader range of text types.
+Rhetorical trees have been employed by many
+generation systems (including ILEX) as the out-
+put of text planning, but in the earlier systems, a single layer of coherence relations was used. A proposal for distinguishing "deep" rhetorical relations from conjunctive relations operating close to the surface was made by (Bateman 1999) for the task of handling spoken language, but to our knowledge this approach has so far not been implemented. Polibox, in contrast to earlier systems, treats the text plan tree as only partially ordered and leaves remaining ordering decisions to sentence planning. Controlling information structure is one advantage of using two distinct layers; eventually, the method will be applied to bilingual generation, where the different linguistic means for attaching clauses and sentences can be systematically related by a (language-specific) layer of conjunctive relations.
+References
+J. Bateman. "Enabling technology for multilingual natural language generation: the KPML development environment." In: Journal of Natural Language Engineering 3(1), 1997.
+J. Bateman. "The dynamics of surfacing." Proc.
+of the workshop on levels of representation in
+discourse, Edinburgh Univ., 1999
+S. Busemann. "Best-first surface realization." Proc. of the Eighth Int'l Workshop on Natural Language Generation, Herstmonceux Castle, 1998.
+CMU Common Lisp. http://www.cons.org/
+cmucl/
+Common Lisp Hypermedia Server. http://
+www.ai.mit.edu/projects/iiip/doc/cl-http/
+home-page.html
+R. Dale, E. Reiter. Building natural language generation systems. Cambridge University Press, 2000.
+P. De Bra. "Design Issues in Adaptive Hypermedia Application Development." Proc. of the Second Workshop on Adaptive Systems and User Modeling on the World Wide Web, Toronto and Banff, 1999.
+R. Kasper. "A flexible interface for linking applications to the PENMAN sentence generator." Proc. of the DARPA workshop on speech and natural language processing. Univ. of Pennsylvania, 1989.
+Loom Knowledge Representation Language.
+http://www.isi.edu/projects/loom
+W. Mann, S. Thompson. "Rhetorical structure theory: a theory of text organization." In: L. Polyani (ed.): The structure of discourse. Norwood: Ablex, 1987.
+J. Martin. English Text: System and Structure.
+Amsterdam: John Benjamins, 1992.
+C. Mellish, M. O'Donnell, J. Oberlander, A. Knott. "An architecture for opportunistic text generation." Proc. of the Ninth Int'l Workshop on Natural Language Generation, Niagara-on-the-Lake, Ontario, 1998.
+M. Milosavljevic. "Content Selection in Comparison Generation." Proc. of the 6th European Workshop on Natural language Generation. Duisburg, 1997.
+J. Siskind, D. McAllister. "Nondeterministic Lisp as a Substrate for Constraint Logic Programming." Proc. of AAAI-93, 1993.
+M. Stede. Lexical semantics and knowledge rep-
+resentation in multilingual text generation. Dordrecht/Boston: Kluwer, 1999.

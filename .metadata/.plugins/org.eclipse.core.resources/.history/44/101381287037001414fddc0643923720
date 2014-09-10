@@ -1,0 +1,19 @@
+package KMeans;
+
+import util.DocUtils;
+
+
+
+public class KMeans 
+{
+
+	public static void main(String[] args) 
+	{
+		final String DATA_SRC = "data/blog_data/";
+		Doc2HashMap UB = new Doc2HashMap(DATA_SRC, 500, true);
+		System.out.println(UB.toString());
+		
+		
+	}
+
+}

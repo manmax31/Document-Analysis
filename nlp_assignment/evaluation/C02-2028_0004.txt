@@ -1,0 +1,51 @@
+3) ps -= ||; *1; ps := s*;
+end reduce(); //reduce part
+
+else if Action[] = shift(input s*),
+then begin
+pi++; *pi := s*; pb++; *pb := s*;
+end shift(); //shift part
+else if Action[] = accept()
+then Success and Output; //the parsing succeeds
+else
+error(); // parsing is error here
+End
+Until: The input symbol is the end of the sentence. Or accept function occurs or error function occurs.
+(1) Reduce Action
+When the reduce action is performed, the rule candidates are selected in the list from the first rule to the last one that are arranged according to the probabilities and frequencies. If one of these rules satisfies the condition, then the flag of this rule is changed from FALSE to TRUE and stop here, and continue to read input word. Otherwise trace back.
+(2) Shift Action
+Shift action is executed under two conditions. One is based on the action table. The other is that when error action occurs, the base noun phrase identification continues to perform shift action while the full parsing enters trace part.
+(3) Error Action
+When error action occurs, trace back to the previous branch and perform another rule candidate listed in the entry. If there is no path can be searched in the current branch point or all routes are not passed through, the parsing fails and output the final error symbol. This situation is only used to the full parsing.
+3.2.3 the Comparison with GLR
+In order to explain explicitly our extended GLR parsing algorithm, we compare it with GLR algorithm. Table 3 gives the comparison results.
+Table 3: Comparison with GLR
+4. Experiment and Results
+Our experiments include two parts: Chinese base noun phrase parsing and Chinese full syntactic parsing.
+The obvious difference of Chinese baseNP parsing and full parsing is that the former must give the parsing results while the latter sometimes need to trace back and output the error symbols. Because baseNP identification belongs to the shallow parsing, it only need to gives the recognized noun phrase structures. If there are no phrases found, then output the original sentence. Obviously Chinese baseNP parsing is much simpler and more efficient than the full parsing from the point of the method and the runtime.
+Our experiments are performed based on Chinese tree-bank corpus. There are totally 10,000 Chinese sentences whose grammar structures are described by brackets. Table 4 shows the characteristic of the corpus in the parsing process.
+Corpus	Number of the	Average
+	Sentences.	length	of
+Style		each
+Of Parsing BaseNP Identification Full Parsing	Training: 97% Testing: 3% Training: 98% Test: 2%	sentence 22 words 15 words 22 words 15 words
+Table 4: characteristic of corpus
+To two styles of parsing presented above, we give two types of results respectively.
+(1). Chinese BaseNP identification
+In our system, base noun phrases are defined to include not only pure noun phrase (NP) but also quantifier phrase (QP), such as QP ( /CD/CD /M ). ).
+To each Chinese sentence, baseNP identification always gives the final parsing results in which
+methods aspects
+GLR algorithm Our
+algorithm
+Grammar System
+CFG	PCFG*
+Statistical Information
+no	Probability,
+Frequency
+Data Structure Graph-Structured
+Stack
+Stack List
+Parsing Process
+Not simplified	Pruning
+Other Attributes
+Augmentation to each rule
+no

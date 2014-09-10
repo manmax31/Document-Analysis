@@ -1,0 +1,44 @@
+the base noun phrases are distinguished by brackets. Some samples are listed.
+1. /VV	/AS NP ( (/NR	/NN)
+/DEG NP(/JJ	/NN)/NN)
+2. ( /DT /M	/NN )	/VV /AS
+(	/NN	/NN) /DEG ( /JJ
+/NN)
+There are two and three base noun phrases in sentence 1 and sentence 2 respectively.
+(2). Chinese full parsing
+Following sentences are the results of Chinese full parsing.
+1. VP (VP (/VV	/AS) NP ( NP ( (
+/NR	/NN )	/DEG NP (	/JJ
+/NN ) ) )
+2.IP ( NP (/DT /M /NN ) VP(VP( /VV /AS) NP ( NP (/NN/NN /NN) /DEG NP (/JJ /NN))))
+In order to display the parsing result clearly, sentence 2 is showed in the tree bank format.
+IP (NP ( DT
+M
+NN )
+VP (VV
+AS
+NP ( NP ( NN
+NN )
+DEG
+NP ( JJ
+NN )))
+Type	Precision	Recall	Num
+	(%)	(%)	of
+BaseNP Full	87.42	81.4	Rules
+	70.56	67.77	400
+			2000
+parsing			
+Table 5 is the results of these types of parsing.
+The experimental results show that our parsing algorithm, extended GLR parsing algorithm, is efficient to both Chinese baseNP parsing and full parsing.
+5. Conclusions
+In our system, we present the extended GLR parsing algorithm that is based on the Tomita’s GLR algorithm. A new grammar system PCFG*
+based on PCFG is proposed to describe the grammatical rules that are added probability and frequency attributes. So our parsing system combines Chinese grammar phenomena with statistics distribution. This is feasible and efficient to implement Chinese shallow parsing and full parsing. In the future task, we further improve the efficiency and robust of our parsing algorithm and expand Chinese grammatical rules with both statistical attributions and language information. It is important to utilize the results of base noun phrases identification and to improve the precision of Chinese full parsing. Acknowledgements
+The research work described in this paper is supported by the National Nature Science Foundation of China under grant number 9835003 and the National Science Foundation of China under grand number 60175012 and the National Key Basic Research Program of China under grand number G1998030504.
+References
+Masaru Tomita, Efficient Parsing for Natural Language – A Fast Algorithm for Practical Systems, Kluwer Academic Publishers, 1986
+Tomita M., an Efficient Augmented-Context-Free Algorithm, Computational Linguistics, Volume 13, Numbers 1-2, 1987
+Inui K., Sornlertlamvanich V., Tanaka H. and Tokunaga T., Probabilistic GLR Parsing: a New Formalization and Its Impact on parsing Performance, Journal of Natural Language Processing, Vol.5, No.3, pp.33-52, 1998
+Sornlertlamvanich V., Inui K., Tanaka H. and Tokunaga, T., A New Probabilistic LR Parsing, Proceedings of Annual Meeting of the Japan Association for Natural Language Processing, 1997
+Lavie A., GLR*: A Robust Grammar-Focus Parser for Spontaneously Spoken Language, Ph.D. thesis, Carnegie Mellon University, USA, 1996
+Abney S., Parsing by Chunks, Kluwer Academic Publishers, 1991
+Xia F., the Segmentation Guidelines for the Penn Chinese Treebank (3.0), 2000

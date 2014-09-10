@@ -1,0 +1,908 @@
+Things You Should Never Do, Part I
+by Joel Spolsky
+Thursday, April 06, 2000
+Netscape 6.0 is finally going into its first public beta. There never was a version 5.0. The last major release, version 4.0, was released almost three years ago. Three years is an awfully long time in the Internet world. During this time, Netscape sat by, helplessly, as their market share plummeted.
+It's a bit smarmy of me to criticize them for waiting so long between releases. They didn't do it on purpose, now, did they?
+Well, yes. They did. They did it by making the single worst strategic mistake that any software company can make:
+They decided to rewrite the code from scratch.
+Netscape wasn't the first company to make this mistake. Borland made the same mistake when they bought Arago and tried to make it into dBase for Windows, a doomed project that took so long that Microsoft Access ate their lunch, then they made it again in rewriting Quattro Pro from scratch and astonishing people with how few features it had. Microsoft almost made the same mistake, trying to rewrite Word for Windows from scratch in a doomed project called Pyramid which was shut down, thrown away, and swept under the rug. Lucky for Microsoft, they had never stopped working on the old code base, so they had something to ship, making it merely a financial disaster, not a strategic one.
+We're programmers. Programmers are, in their hearts, architects, and the first thing they want to do when they get to a site is to bulldoze the place flat and build something grand. We're not excited by incremental renovation: tinkering, improving, planting flower beds.
+There's a subtle reason that programmers always want to throw away the code and start over. The reason is that they think the old code is a mess. And here is the interesting observation: they are probably wrong. The reason that they think the old code is a mess is because of a cardinal, fundamental law of programming:
+It’s harder to read code than to write it.
+This is why code reuse is so hard. This is why everybody on your team has a different function they like to use for splitting strings into arrays of strings. They write their own function because it's easier and more fun than figuring out how the old function works.
+As a corollary of this axiom, you can ask almost any programmer today about the code they are working on. "It's a big hairy mess," they will tell you. "I'd like nothing better than to throw it out and start over."
+
+Why is it a mess?
+
+"Well," they say, "look at this function. It is two pages long! None of this stuff belongs in there! I don't know what half of these API calls are for."
+
+Before Borland's new spreadsheet for Windows shipped, Philippe Kahn, the colorful founder of Borland, was quoted a lot in the press bragging about how Quattro Pro would be much better than Microsoft Excel, because it was written from scratch. All new source code! As if source code rusted.
+
+The idea that new code is better than old is patently absurd. Old code has been used. It has been tested. Lots of bugs have been found, and they've been fixed. There's nothing wrong with it. It doesn't acquire bugs just by sitting around on your hard drive. Au contraire, baby! Is software supposed to be like an old Dodge Dart, that rusts just sitting in the garage? Is software like a teddy bear that's kind of gross if it's not made out of all new material?
+
+Back to that two page function. Yes, I know, it's just a simple function to display a window, but it has grown little hairs and stuff on it and nobody knows why. Well, I'll tell you why: those are bug fixes. One of them fixes that bug that Nancy had when she tried to install the thing on a computer that didn't have Internet Explorer. Another one fixes that bug that occurs in low memory conditions. Another one fixes that bug that occurred when the file is on a floppy disk and the user yanks out the disk in the middle. That LoadLibrary call is ugly but it makes the code work on old versions of Windows 95.
+
+Each of these bugs took weeks of real-world usage before they were found. The programmer might have spent a couple of days reproducing the bug in the lab and fixing it. If it's like a lot of bugs, the fix might be one line of code, or it might even be a couple of characters, but a lot of work and time went into those two characters.
+
+When you throw away code and start from scratch, you are throwing away all that knowledge. All those collected bug fixes. Years of programming work.
+
+You are throwing away your market leadership. You are giving a gift of two or three years to your competitors, and believe me, that is a long time in software years.
+
+You are putting yourself in an extremely dangerous position where you will be shipping an old version of the code for several years, completely unable to make any strategic changes or react to new features that the market demands, because you don't have shippable code. You might as well just close for business for the duration.
+
+You are wasting an outlandish amount of money writing code that already exists.
+
+
+
+Is there an alternative? The consensus seems to be that the old Netscape code base was really bad. Well, it might have been bad, but, you know what? It worked pretty darn well on an awful lot of real world computer systems.
+
+When programmers say that their code is a holy mess (as they always do), there are three kinds of things that are wrong with it.
+
+First, there are architectural problems. The code is not factored correctly. The networking code is popping up its own dialog boxes from the middle of nowhere; this should have been handled in the UI code. These problems can be solved, one at a time, by carefully moving code, refactoring, changing interfaces. They can be done by one programmer working carefully and checking in his changes all at once, so that nobody else is disrupted. Even fairly major architectural changes can be done without throwing away the code. On the Juno project we spent several months rearchitecting at one point: just moving things around, cleaning them up, creating base classes that made sense, and creating sharp interfaces between the modules. But we did it carefully, with our existing code base, and we didn't introduce new bugs or throw away working code.
+
+A second reason programmers think that their code is a mess is that it is inefficient. The rendering code in Netscape was rumored to be slow. But this only affects a small part of the project, which you can optimize or even rewrite. You don't have to rewrite the whole thing. When optimizing for speed, 1% of the work gets you 99% of the bang.
+
+Third, the code may be doggone ugly. One project I worked on actually had a data type called a FuckedString. Another project had started out using the convention of starting member variables with an underscore, but later switched to the more standard "m_". So half the functions started with "_" and half with "m_", which looked ugly. Frankly, this is the kind of thing you solve in five minutes with a macro in Emacs, not by starting from scratch.
+
+It's important to remember that when you start from scratch there is absolutely no reason to believe that you are going to do a better job than you did the first time. First of all, you probably don't even have the same programming team that worked on version one, so you don't actually have "more experience". You're just going to make most of the old mistakes again, and introduce some new problems that weren't in the original version.
+
+The old mantra build one to throw away is dangerous when applied to large scale commercial applications. If you are writing code experimentally, you may want to rip up the function you wrote last week when you think of a better algorithm. That's fine. You may want to refactor a class to make it easier to use. That's fine, too. But throwing away the whole program is a dangerous folly, and if Netscape actually had some adult supervision with software industry experience, they might not have shot themselves in the foot so badly.
+
+Strategy Letter I: Ben and Jerry's vs. Amazon
+by Joel Spolsky
+Friday, May 12, 2000
+Building a company? You've got one very important decision to make, because it affects everything else you do. No matter what else you do, you absolutely must figure out which camp you're in, and gear everything you do accordingly, or you're going to have a disaster on your hands.
+
+The decision? Whether to grow slowly, organically, and profitably, or whether to have a big bang with very fast growth and lots of capital.
+
+The organic model is to start small, with limited goals, and slowly build a business over a long period of time. I'm going to call this the Ben and Jerry's model, because Ben and Jerry's fits this model pretty well.
+
+The other model, popularly called "Get Big Fast" (a.k.a. "Land Grab"), requires you to raise a lot of capital, and work as quickly as possible to get big fast without concern for profitability. I'm going to call this the Amazon model, because Jeff Bezos, the founder of Amazon, has practically become the celebrity spokesmodel for Get Big Fast.
+
+Let's look at some of the differences between these models. The first thing to ask is: are you going into a business that has competition, or not?
+
+Ben and Jerry's	Amazon
+Lots of established competitors	New technology, no competition at first
+If you don't have any real competition, like Amazon, there is a chance that you can succeed at a "land grab", that is, get as many customers as quickly as possible, so that later competitors will have a serious barrier to entry. But if you're going into an industry where there is already a well-established set of competitors, the land-grab idea doesn't make sense. You need to create your customer base by getting customers to switch over from competitors. 
+
+In general, venture capitalists aren't too enthusiastic about the idea of going into a market with pesky competitors. Personally, I'm not so scared of established competition; perhaps because I worked on Microsoft Excel during a period when it almost completely took over Lotus 123, which virtually had the market to themselves. The number one word processor, Word, displaced WordPerfect, which displaced WordStar, all of which had been near monopolies at one time or another. And Ben and Jerry's grew to be a fabulous business, even though it's not like you couldn't get ice cream before they came along. It's not impossible to displace a competitor, if that's what you want to do. (I'll talk about how to do that in a future Strategy Letter).
+
+Another question about displacing competitors has to do with network effects and lock-in:
+
+Ben and Jerry's	Amazon
+No network effect; weak customer lock-in	Strong network effect, strong customer lock-in
+A "network effect" is a situation where the more customers you have, the more customers you will get. It's based on Metcalfe's Law: the value of a network is equal to the number of users squared.
+
+A good example is eBay. If you want to sell your old Patek Philippe watch, you're going to get a better price on eBay, because there are more buyers there. If you want to buy a Patek Philippe watch, you're going to look on eBay, because there are more sellers there.
+
+Another extremely strong network effect is proprietary chat systems like ICQ or AOL Instant Messenger. If you want to chat with people, you have to go where they are, and ICQ and AOL have the most people by far. Chances are, your friends are using one of those services, not one of the smaller ones like MSN Instant Messenger. With all of Microsoft's muscle, money, and marketing skill, they are just not going to be able to break into auctions or instant messaging, because the network effects there are so strong.
+
+"Lock-in" is where there is something about the business that makes people not want to switch. Nobody wants to switch their Internet provider, even if the service isn't very good, because of the hassle of changing your email address and notifying everyone of the new email address. People don't want to switch word processors if their old files can't be read by the new word processor.
+
+Even better than lock-in is the sneaky version I call stealth lock-in: services which lock you in without your even realizing it. For example, all those new services like PayMyBills.com which receive your bills for you, scan them in, and show them to you on the Internet. They usually come with three months free service. But when the three months are up, if you don't want to continue with the service, you have no choice but to contact every single bill provider and ask them to change the billing address back to your house. The sheer chore of doing this is likely to prevent you from switching away from PayMyBills.com -- better just to let them keep sucking $8.95 out of your bank account every month. Gotcha!
+
+If you are going into a business that has natural network effects and lock-in, and there are no established competitors, then you better use the Amazon model, or somebody else will, and you simply won't be able to get a toehold.
+
+Quick case study. In 1998, AOL was spending massively to grow at a rate of a million customers every five weeks.  AOL has nice features like chat rooms and instant messaging that provide stealth lock-in. Once you've found a group of friends you like to chat with, you are simply not going to switch Internet providers. That's like trying to get all new  friends. In my mind that's the key reason that AOL can charge around $22 a month when there are plenty of $10 a month Internet providers. 
+
+While I was working at Juno, management just failed to understand this point, and they missed their best opportunity to overtake AOL during a land rush when everyone was coming online: they didn't spend strongly enough on customer acquisition because they didn't want to dilute existing shareholders by raising more capital, and they didn't think strategically about chat and IM, so they never developed any software features to provide the kind of stealth lock-in that AOL has. Now Juno has around 3 million people paying them an average of $5.50 a month, while AOL has around 21 million people paying them an average of $17 a month. "Oops."
+
+Ben and Jerry's	Amazon
+Little capital required; break even fast	Outrageous amounts of capital required; profitability can take years
+Ben and Jerry's companies start on somebody's credit card. In their early months and years, they have to use a business model that becomes profitable extremely quickly, which may not be the ultimate business model that they want to achieve. For example, you may want to become a giant ice cream company with $200,000,000 in annual sales, but for now, you're going to have to settle for opening a little ice cream shop in Vermont, hope that it's profitable, and, if it is, reinvest the profits to expand business steadily. The Ben and Jerry's corporate history says they started with a $12,000 investment. ArsDigita says that they started with an $11,000 investment. These numbers sound like a typical MasterCard credit limit. Hmmm.
+
+The Joel Test: 12 Steps to Better Code
+by Joel Spolsky
+Wednesday, August 09, 2000
+Have you ever heard of SEMA? It's a fairly esoteric system for measuring how good a software team is. No, wait! Don't follow that link! It will take you about six years just to understand that stuff. So I've come up with my own, highly irresponsible, sloppy test to rate the quality of a software team. The great part about it is that it takes about 3 minutes. With all the time you save, you can go to medical school.
+
+
+	
+The Joel Test
+
+Do you use source control?
+Can you make a build in one step?
+Do you make daily builds?
+Do you have a bug database?
+Do you fix bugs before writing new code?
+Do you have an up-to-date schedule?
+Do you have a spec?
+Do programmers have quiet working conditions?
+Do you use the best tools money can buy?
+Do you have testers?
+Do new candidates write code during their interview?
+Do you do hallway usability testing?
+
+
+The neat thing about The Joel Test is that it's easy to get a quick yes or no to each question. You don't have to figure out lines-of-code-per-day or average-bugs-per-inflection-point. Give your team 1 point for each "yes" answer. The bummer about The Joel Test is that you really shouldn't use it to make sure that your nuclear power plant software is safe.
+
+A score of 12 is perfect, 11 is tolerable, but 10 or lower and you've got serious problems. The truth is that most software organizations are running with a score of 2 or 3, and they need serious help, because companies like Microsoft run at 12 full-time. 
+
+Of course, these are not the only factors that determine success or failure: in particular, if you have a great software team working on a product that nobody wants, well, people aren't going to want it. And it's possible to imagine a team of "gunslingers" that doesn't do any of this stuff that still manages to produce incredible software that changes the world. But, all else being equal, if you get these 12 things right, you'll have a disciplined team that can consistently deliver.
+
+1. Do you use source control?
+I've used commercial source control packages, and I've used CVS, which is free, and let me tell you, CVS is fine. But if you don't have source control, you're going to stress out trying to get programmers to work together. Programmers have no way to know what other people did. Mistakes can't be rolled back easily. The other neat thing about source control systems is that the source code itself is checked out on every programmer's hard drive -- I've never heard of a project using source control that lost a lot of code.
+
+2. Can you make a build in one step?
+By this I mean: how many steps does it take to make a shipping build from the latest source snapshot? On good teams, there's a single script you can run that does a full checkout from scratch, rebuilds every line of code, makes the EXEs, in all their various versions, languages, and #ifdef combinations, creates the installation package, and creates the final media -- CDROM layout, download website, whatever.
+
+If the process takes any more than one step, it is prone to errors. And when you get closer to shipping, you want to have a very fast cycle of fixing the "last" bug, making the final EXEs, etc. If it takes 20 steps to compile the code, run the installation builder, etc., you're going to go crazy and you're going to make silly mistakes.
+
+For this very reason, the last company I worked at switched from WISE to InstallShield: we required that the installation process be able to run, from a script, automatically, overnight, using the NT scheduler, and WISE couldn't run from the scheduler overnight, so we threw it out. (The kind folks at WISE assure me that their latest version does support nightly builds.)
+
+3. Do you make daily builds?
+When you're using source control, sometimes one programmer accidentally checks in something that breaks the build. For example, they've added a new source file, and everything compiles fine on their machine, but they forgot to add the source file to the code repository. So they lock their machine and go home, oblivious and happy. But nobody else can work, so they have to go home too, unhappy.
+
+Breaking the build is so bad (and so common) that it helps to make daily builds, to insure that no breakage goes unnoticed. On large teams, one good way to insure that breakages are fixed right away is to do the daily build every afternoon at, say, lunchtime. Everyone does as many checkins as possible before lunch. When they come back, the build is done. If it worked, great! Everybody checks out the latest version of the source and goes on working. If the build failed, you fix it, but everybody can keep on working with the pre-build, unbroken version of the source.
+
+On the Excel team we had a rule that whoever broke the build, as their "punishment", was responsible for babysitting the builds until someone else broke it. This was a good incentive not to break the build, and a good way to rotate everyone through the build process so that everyone learned how it worked. 
+
+Read more about daily builds in my article Daily Builds are Your Friend.
+
+4. Do you have a bug database?
+I don't care what you say. If you are developing code, even on a team of one, without an organized database listing all known bugs in the code, you are going to ship low quality code. Lots of programmers think they can hold the bug list in their heads. Nonsense. I can't remember more than two or three bugs at a time, and the next morning, or in the rush of shipping, they are forgotten. You absolutely have to keep track of bugs formally.
+
+Bug databases can be complicated or simple. A minimal useful bug database must include the following data for every bug:
+
+complete steps to reproduce the bug
+expected behavior
+observed (buggy) behavior
+who it's assigned to
+whether it has been fixed or not
+If the complexity of bug tracking software is the only thing stopping you from tracking your bugs, just make a simple 5 column table with these crucial fields and start using it.
+
+For more on bug tracking, read Painless Bug Tracking.
+
+5. Do you fix bugs before writing new code?
+The very first version of Microsoft Word for Windows was considered a "death march" project. It took forever. It kept slipping. The whole team was working ridiculous hours, the project was delayed again, and again, and again, and the stress was incredible. When the dang thing finally shipped, years late, Microsoft sent the whole team off to Cancun for a vacation, then sat down for some serious soul-searching.
+
+What they realized was that the project managers had been so insistent on keeping to the "schedule" that programmers simply rushed through the coding process, writing extremely bad code, because the bug fixing phase was not a part of the formal schedule. There was no attempt to keep the bug-count down. Quite the opposite. The story goes that one programmer, who had to write the code to calculate the height of a line of text, simply wrote "return 12;" and waited for the bug report to come in about how his function is not always correct. The schedule was merely a checklist of features waiting to be turned into bugs. In the post-mortem, this was referred to as "infinite defects methodology".
+
+To correct the problem, Microsoft universally adopted something called a "zero defects methodology". Many of the programmers in the company giggled, since it sounded like management thought they could reduce the bug count by executive fiat. Actually, "zero defects" meant that at any given time, the highest priority is to eliminate bugs before writing any new code. Here's why. 
+
+In general, the longer you wait before fixing a bug, the costlier (in time and money) it is to fix.
+
+For example, when you make a typo or syntax error that the compiler catches, fixing it is basically trivial.
+
+When you have a bug in your code that you see the first time you try to run it, you will be able to fix it in no time at all, because all the code is still fresh in your mind.
+
+If you find a bug in some code that you wrote a few days ago, it will take you a while to hunt it down, but when you reread the code you wrote, you'll remember everything and you'll be able to fix the bug in a reasonable amount of time.
+
+But if you find a bug in code that you wrote a few months ago, you'll probably have forgotten a lot of things about that code, and it's much harder to fix. By that time you may be fixing somebody else's code, and they may be in Aruba on vacation, in which case, fixing the bug is like science: you have to be slow, methodical, and meticulous, and you can't be sure how long it will take to discover the cure.
+
+And if you find a bug in code that has already shipped, you're going to incur incredible expense getting it fixed.
+
+That's one reason to fix bugs right away: because it takes less time. There's another reason, which relates to the fact that it's easier to predict how long it will take to write new code than to fix an existing bug. For example, if I asked you to predict how long it would take to write the code to sort a list, you could give me a pretty good estimate. But if I asked you how to predict how long it would take to fix that bug where your code doesn't work if Internet Explorer 5.5 is installed, you can't even guess, because you don't know (by definition) what's causing the bug. It could take 3 days to track it down, or it could take 2 minutes.
+
+What this means is that if you have a schedule with a lot of bugs remaining to be fixed, the schedule is unreliable. But if you've fixed all the known bugs, and all that's left is new code, then your schedule will be stunningly more accurate.
+
+Another great thing about keeping the bug count at zero is that you can respond much faster to competition. Some programmers think of this as keeping the product ready to ship at all times. Then if your competitor introduces a killer new feature that is stealing your customers, you can implement just that feature and ship on the spot, without having to fix a large number of accumulated bugs.
+
+6. Do you have an up-to-date schedule?
+Which brings us to schedules. If your code is at all important to the business, there are lots of reasons why it's important to the business to know when the code is going to be done. Programmers are notoriously crabby about making schedules. "It will be done when it's done!" they scream at the business people.
+
+Unfortunately, that just doesn't cut it. There are too many planning decisions that the business needs to make well in advance of shipping the code: demos, trade shows, advertising, etc. And the only way to do this is to have a schedule, and to keep it up to date.
+
+The other crucial thing about having a schedule is that it forces you to decide what features you are going to do, and then it forces you to pick the least important features and cut them rather than slipping into featuritis (a.k.a. scope creep).
+
+Keeping schedules does not have to be hard. Read my article Painless Software Schedules, which describes a simple way to make great schedules.
+
+7. Do you have a spec?
+Writing specs is like flossing: everybody agrees that it's a good thing, but nobody does it. 
+
+I'm not sure why this is, but it's probably because most programmers hate writing documents. As a result, when teams consisting solely of programmers attack a problem, they prefer to express their solution in code, rather than in documents. They would much rather dive in and write code than produce a spec first.
+
+At the design stage, when you discover problems, you can fix them easily by editing a few lines of text. Once the code is written, the cost of fixing problems is dramatically higher, both emotionally (people hate to throw away code) and in terms of time, so there's resistance to actually fixing the problems. Software that wasn't built from a spec usually winds up badly designed and the schedule gets out of control.  This seems to have been the problem at Netscape, where the first four versions grew into such a mess that management stupidly decided to throw out the code and start over. And then they made this mistake all over again with Mozilla, creating a monster that spun out of control and took several years to get to alpha stage.
+
+My pet theory is that this problem can be fixed by teaching programmers to be less reluctant writers by sending them off to take an intensive course in writing. Another solution is to hire smart program managers who produce the written spec. In either case, you should enforce the simple rule "no code without spec".
+
+Learn all about writing specs by reading my 4-part series.
+
+8. Do programmers have quiet working conditions?
+There are extensively documented productivity gains provided by giving knowledge workers space, quiet, and privacy. The classic software management book Peopleware documents these productivity benefits extensively.
+
+Here's the trouble. We all know that knowledge workers work best by getting into "flow", also known as being "in the zone", where they are fully concentrated on their work and fully tuned out of their environment. They lose track of time and produce great stuff through absolute concentration. This is when they get all of their productive work done. Writers, programmers, scientists, and even basketball players will tell you about being in the zone.
+
+The trouble is, getting into "the zone" is not easy. When you try to measure it, it looks like it takes an average of 15 minutes to start working at maximum productivity. Sometimes, if you're tired or have already done a lot of creative work that day, you just can't get into the zone and you spend the rest of your work day fiddling around, reading the web, playing Tetris.
+
+The other trouble is that it's so easy to get knocked out of the zone. Noise, phone calls, going out for lunch, having to drive 5 minutes to Starbucks for coffee, and interruptions by coworkers -- especially interruptions by coworkers -- all knock you out of the zone. If a coworker asks you a question, causing a 1 minute interruption, but this knocks you out of the zone badly enough that it takes you half an hour to get productive again, your overall productivity is in serious trouble. If you're in a noisy bullpen environment like the type that caffeinated dotcoms love to create, with marketing guys screaming on the phone next to programmers, your productivity will plunge as knowledge workers get interrupted time after time and never get into the zone.
+
+With programmers, it's especially hard. Productivity depends on being able to juggle a lot of little details in short term memory all at once. Any kind of interruption can cause these details to come crashing down. When you resume work, you can't remember any of the details (like local variable names you were using, or where you were up to in implementing that search algorithm) and you have to keep looking these things up, which slows you down a lot until you get back up to speed.
+
+Here's the simple algebra. Let's say (as the evidence seems to suggest) that if we interrupt a programmer, even for a minute, we're really blowing away 15 minutes of productivity. For this example, lets put two programmers, Jeff and Mutt, in open cubicles next to each other in a standard Dilbert veal-fattening farm. Mutt can't remember the name of the Unicode version of the strcpy function. He could look it up, which takes 30 seconds, or he could ask Jeff, which takes 15 seconds. Since he's sitting right next to Jeff, he asks Jeff. Jeff gets distracted and loses 15 minutes of productivity (to save Mutt 15 seconds).
+
+Now let's move them into separate offices with walls and doors. Now when Mutt can't remember the name of that function, he could look it up, which still takes 30 seconds, or he could ask Jeff, which now takes 45 seconds and involves standing up (not an easy task given the average physical fitness of programmers!). So he looks it up. So now Mutt loses 30 seconds of productivity, but we save 15 minutes for Jeff. Ahhh!
+
+9. Do you use the best tools money can buy?
+Writing code in a compiled language is one of the last things that still can't be done instantly on a garden variety home computer. If your compilation process takes more than a few seconds, getting the latest and greatest computer is going to save you time. If compiling takes even 15 seconds, programmers will get bored while the compiler runs and switch over to reading The Onion, which will suck them in and kill hours of productivity.
+
+Debugging GUI code with a single monitor system is painful if not impossible. If you're writing GUI code, two monitors will make things much easier.
+
+Most programmers eventually have to manipulate bitmaps for icons or toolbars, and most programmers don't have a good bitmap editor available. Trying to use Microsoft Paint to manipulate bitmaps is a joke, but that's what most programmers have to do.
+
+At my last job, the system administrator kept sending me automated spam complaining that I was using more than ... get this ... 220 megabytes of hard drive space on the server. I pointed out that given the price of hard drives these days, the cost of this space was significantly less than the cost of the toilet paper I used. Spending even 10 minutes cleaning up my directory would be a fabulous waste of productivity.
+
+Top notch development teams don't torture their programmers. Even minor frustrations caused by using underpowered tools add up, making programmers grumpy and unhappy. And a grumpy programmer is an unproductive programmer.
+
+To add to all this... programmers are easily bribed by giving them the coolest, latest stuff. This is a far cheaper way to get them to work for you than actually paying competitive salaries!
+
+10. Do you have testers?
+If your team doesn't have dedicated testers, at least one for every two or three programmers, you are either shipping buggy products, or you're wasting money by having $100/hour programmers do work that can be done by $30/hour testers. Skimping on testers is such an outrageous false economy that I'm simply blown away that more people don't recognize it.
+
+Read Top Five (Wrong) Reasons You Don't Have Testers, an article I wrote about this subject.
+
+11. Do new candidates write code during their interview?
+Would you hire a magician without asking them to show you some magic tricks? Of course not.
+
+Would you hire a caterer for your wedding without tasting their food? I doubt it. (Unless it's Aunt Marge, and she would hate you forever if you didn't let her make her "famous" chopped liver cake).
+
+Yet, every day, programmers are hired on the basis of an impressive resumé or because the interviewer enjoyed chatting with them. Or they are asked trivia questions ("what's the difference between CreateDialog() and DialogBox()?") which could be answered by looking at the documentation. You don't care if they have memorized thousands of trivia about programming, you care if they are able to produce code. Or, even worse, they are asked "AHA!" questions: the kind of questions that seem easy when you know the answer, but if you don't know the answer, they are impossible.
+
+Please, just stop doing this. Do whatever you want during interviews, but make the candidate write some code. (For more advice, read my Guerrilla Guide to Interviewing.)
+
+12. Do you do hallway usability testing?
+A hallway usability test is where you grab the next person that passes by in the hallway and force them to try to use the code you just wrote. If you do this to five people, you will learn 95% of what there is to learn about usability problems in your code.
+
+Good user interface design is not as hard as you would think, and it's crucial if you want customers to love and buy your product. You can read my free online book on UI design, a short primer for programmers.
+
+But the most important thing about user interfaces is that if you show your program to a handful of people, (in fact, five or six is enough) you will quickly discover the biggest problems people are having. Read Jakob Nielsen's article explaining why. Even if your UI design skills are lacking, as long as you force yourself to do hallway usability tests, which cost nothing, your UI will be much, much better.
+
+Amazon companies raise money practically as fast as anyone can spend it. There's a reason for this. They are in a terrible rush. If they are in a business with no competitors and network effects, they better get big super-fast. Every day matters. And there are lots of ways to substitute money for time (see sidebar). Nearly all of them are fun.
+
+Ways to substitute money for time:
+Use prebuilt, furnished executive offices instead of traditional office space. Cost: about 3 times as much. Time saved: several months to a year, depending on market.
+Pay outrageous salaries or offer programmers BMWs as starting bonuses. Cost: about 25% extra for technical staff. Time saved: you can fill openings in 3 weeks instead of the more typical 6 months.
+Hire consultants instead of employees. Cost: about 3 times as much. Time saved: you can get consultants up and running right away.
+Having trouble getting your consultants to give you the time and attention you need? Bribe them with cash until they only want to work for you.
+Spend cash freely to spot-solve problems. If your new star programmer isn't getting a lot of work done because they are busy setting up their new house and relocating, hire a high class relocation service to do it for them. If it's taking forever to get phones installed in your new offices, buy a couple of dozen cellular phones. Internet access problems slowing people down? Just get two redundant providers. Provide a concierge available to all employees for picking up dry cleaning, getting reservations, arranging for limos to the airport, etc.
+Ben and Jerry's companies just can't afford to do this, so they have to settle for growing slowly.
+
+Ben and Jerry's	Amazon
+Corporate culture is important	Corporate culture is impossible
+When you are growing faster than about 100% per year, it is simply impossible for mentors to transmit corporate values to new hires. If a programmer is promoted to manager and suddenly has 5 new reports, hired just yesterday, it is simply impossible for there to be very much mentoring. Netscape is the most egregious example of this, growing from 5 to about 2000 programmers in one year. As a result, their culture was a mishmash of different people with different values about the company, all tugging in different directions.
+
+For some companies, this might be OK. For other companies, the corporate culture is an important part of the raison-d'être of the company. Ben and Jerry's exists because of the values of the founders, who would not accept growing faster than the rate at which that culture can be promulgated. 
+
+Let's take a hypothetical software example. Suppose you want to break into the market for word processors. Now, this market seems to be pretty sewn up by Microsoft, but you see a niche for people who, for whatever reason, absolutely cannot have their word processors crashing on them. You are going to make a super-robust, industrial strength word processor that just won't go down and sell it at a premium to people who simply depend on word processors for their lives. (OK, it's a stretch. I said this was a hypothetical example).
+
+Now, your corporate culture probably includes all kinds of techniques for writing highly-robust code: unit testing, formal code reviews, coding conventions, large QA departments, and so on. These techniques are not trivial; they must be learned over a period of time. While a new programmer is learning how to write robust code, they need to be mentored and coached by someone more experienced.
+
+As soon as you try to grow so fast that mentoring and coaching is impossible, you are simply going to stop transmitting those values. New hires won't know better and will write unreliable code. They won't check the return value from malloc(), and their code will fail in some bizarre case that they never thought about, and nobody will have time to review their code and teach them the right way to do it, and your entire competitive advantage over Microsoft Word has been squandered.
+
+Ben and Jerry's	Amazon
+Mistakes become valuable lessons	Mistakes are not really noticed
+A company that is growing too fast will simply not notice when it makes a big mistake, especially of the spend-too-much-money kind. Amazon buys Junglee, a comparison shopping service, for around $180,000,000 in stock, and then suddenly realizes that comparison shopping services are not very good for their business, so they just shut it down. Having piles and piles of cash makes stupid mistakes easy to cover up.
+
+Ben and Jerry's	Amazon
+It takes a long time to get big	You get big very fast
+Getting big fast gives the impression (if not the reality) of being successful. When prospective employees see that you're hiring 30 new people a week, they will feel like they are part of something big and exciting and successful which will IPO. They may not be as impressed by a "sleepy little company" with 12 employees and a dog, even if the sleepy company is profitable and is building a better long-term company.
+
+
+A sleepy little company in Albuquerque
+
+As a rule of thumb, you can make a nice place to work, or you can promise people they'll get rich quick. But you have to do one of those, or you won't be able to hire.
+
+Some of your employees will be impressed by a company with a high chance of an IPO that gives out lots of stock options. Such people will be willing to put in three or four years at a company like this, even if they hate every minute of their working days, because they see the pot at the end of the rainbow.
+
+If you're growing slowly and organically, the pot may be farther off. In that case, you have no choice but to make a work environment where the journey is the reward. It can't be hectic 80 hour workweeks. The office can't be a big noisy loft jammed full of folding tables and hard wooden chairs. You have to give people decent vacations. People have to be friends with their co-workers, not just co-workers. Sociology and community at work matter. Managers have to be enlightened and get off people's backs, they can't be Dilbertesque micromanagers. If you do all this, you'll attract plenty of people who have been fooled too many times by dreams of becoming a millionaire in the next IPO; now they are just looking for something sustainable.
+
+Ben and Jerry's	Amazon
+You'll probably succeed. You certainly won't lose too much money.	You have a tiny chance of becoming a billionaire, and a high chance of just failing.
+With the Ben and Jerry's model, if you're even reasonably smart, you're going to succeed. It may be a bit of a struggle, there may be good years and bad years, but unless we have another depression, you're certainly not going to lose too much money, because you didn't put in too much to begin with.
+
+The trouble with the Amazon model is that all anybody thinks about is Amazon. And there's only one Amazon. You have to think of the other 95% of companies which spend an astonishing amount of venture capital and then simply fail because nobody wants to buy their product. At least, if you follow the Ben and Jerry's model, you'll know that nobody wants your product long before you spend more than one MasterCard's worth of credit limit on it.
+
+The Worst Thing You Can Do
+The worst thing you can do is fail to decide whether you're going to be a Ben and Jerry's company or an Amazon company.
+
+If you're going into a market with no existing competition, lock-in, and network effects, you better use the Amazon model, or you're going the way of Wordsworth.com, which started two years before Amazon, and nobody's ever heard of them. Or even worse, you're going to be a ghost site like MSN Auctions with virtually no chance of ever overcoming ebay. (Read Wordsworth's reply )
+
+If you're going into an established market, getting big fast is a fabulous way of wasting tons of money, as did BarnesandNoble.com. Your best hope is to do something sustainable and profitable, so that you have years to slowly take over your competition.
+
+Still can't decide? There are other things to consider. Think of your personal values. Would you rather have a company like Amazon or a company like Ben and Jerry's? Read a couple of corporate histories - Amazon and Ben and Jerry's for starters, even though they are blatant hagiographies, and see which one jibes more with your set of core values. Actually, an even better model for a Ben and Jerry's company is Microsoft, and there are lots of histories of Microsoft. Microsoft was, in a sense, "lucky" to land the PC-DOS deal, but the company was profitable and growing all along, so they could have hung around indefinitely waiting for their big break.
+
+Think of your risk/reward profile. Do you want to take a shot at being a billionaire by the time you're 35, even if the chances of doing that make the lottery look like a good deal? Ben and Jerry's companies are not going to do that for you.
+
+Probably the worst thing you can do is to decide that you have to be an Amazon company, and then act like a Ben and Jerry's company (while in denial all the time). Amazon companies absolutely must substitute cash for time whenever they can. You may think you're smart and frugal by insisting on finding programmers who will work at market rates. But you're not so smart, because that's going to take you six months, not two months, and those 4 months might mean you miss the Christmas shopping season, so now it cost you a year, and probably made your whole business plan unviable. You may think that it's smart to have a Mac version of your software, as well as a Windows version, but if it takes you twice as long to ship while your programmers build a compatibility layer, and you only get 15% more customers, well, you're not going to look so smart, then, are you?
+
+Both models work, but you've got to pick one and stick to it, or you'll find things mysteriously going wrong and you won't quite know why.
+
+Fire And Motion
+by Joel Spolsky
+Sunday, January 06, 2002
+Sometimes I just can't get anything done.
+
+Sure, I come into the office, putter around, check my email every ten seconds, read the web, even do a few brainless tasks like paying the American Express bill. But getting back into the flow of writing code just doesn't happen.
+
+TetrisThese bouts of unproductiveness usually last for a day or two. But there have been times in my career as a developer when I went for weeks at a time without being able to get anything done. As they say, I'm not in flow. I'm not in the zone. I'm not anywhere.
+
+Everybody has mood swings; for some people they are mild, for others, they can be more pronounced or even dysfunctional. And the unproductive periods do seem to correlate somewhat with gloomier moods.
+
+It makes me think of those researchers who say that basically people can't control what they eat, so any attempt to diet is bound to be short term and they will always yoyo back to their natural weight. Maybe as a software developer I really can't control when I'm productive, and I just have to take the slow times with the fast times and hope that they average out to enough lines of code to make me employable.
+
+ 
+
+ 
+Go read The Onion for a while.
+ 
+ 
+What drives me crazy is that ever since my first job I've realized that as a developer, I usually average about two or three hours a day of productive coding. When I had a summer internship at Microsoft, a fellow intern told me he was actually only going into work from 12 to 5 every day. Five hours, minus lunch, and his team loved him because he still managed to get a lot more done than average. I've found the same thing to be true. I feel a little bit guilty when I see how hard everybody else seems to be working, and I get about two or three quality hours in a day, and still I've always been one of the most productive members of the team. That's probably why when Peopleware and XP insist on eliminating overtime and working strictly 40 hour weeks, they do so secure in the knowledge that this won't reduce a team's output.
+
+But it's not the days when I "only" get two hours of work done that worry me. It's the days when I can't do anything.
+
+I've thought about this a lot. I tried to remember the time when I got the most work done in my career. It was probably when Microsoft moved me into a beautiful, plush new office with large picture windows overlooking a pretty stone courtyard full of cherry trees in bloom. Everything was clicking. For months I worked nonstop grinding out the detailed specification for Excel Basic -- a monumental ream of paper going into incredible detail covering a gigantic object model and programming environment. I literally never stopped. When I had to go to Boston for MacWorld I took a laptop with me, and documented the Window class sitting on a pleasant terrace at HBS.
+
+Once you get into flow it's not too hard to keep going. Many of my days go like this: (1) get into work (2) check email, read the web, etc. (3) decide that I might as well have lunch before getting to work (4) get back from lunch (5) check email, read the web, etc. (6) finally decide that I've got to get started (7) check email, read the web, etc. (8) decide again that I really have to get started (9) launch the damn editor and (10) write code nonstop until I don't realize that it's already 7:30 pm.
+
+Somewhere between step 8 and step 9 there seems to be a bug, because I can't always make it across that chasm.bike trip For me, just getting started is the only hard thing. An object at rest tends to remain at rest. There's something incredible heavy in my brain that is extremely hard to get up to speed, but once it's rolling at full speed, it takes no effort to keep it going. Like a bicycle decked out for a cross-country, self-supported bike trip -- when you first start riding a bike with all that gear, it's hard to believe how much work it takes to get rolling, but once you are rolling, it feels just as easy as riding a bike without any gear.
+
+Maybe this is the key to productivity: just getting started. Maybe when pair programming works it works because when you schedule a pair programming session with your buddy, you force each other to get started.
+
+Joel in the Army
+
+When I was an Israeli paratrooper a general stopped by to give us a little speech about strategy. In infantry battles, he told us, there is only one strategy: Fire and Motion. You move towards the enemy while firing your weapon. The firing forces him to keep his head down so he can't fire at you. (That's what the soldiers mean when they shout "cover me." It means, "fire at our enemy so he has to duck and can't fire at me while I run across this street, here." It works.)  The motion allows you to conquer territory and get closer to your enemy, where your shots are much more likely to hit their target. If you're not moving, the enemy gets to decide what happens, which is not a good thing. If you're not firing, the enemy will fire at you, pinning you down.
+
+I remembered this for a long time. I noticed how almost every kind of military strategy, from air force dogfights to large scale naval maneuvers, is based on the idea of Fire and Motion. It took me another fifteen years to realize that the principle of Fire and Motion is how you get things done in life. You have to move forward a little bit, every day. It doesn't matter if your code is lame and buggy and nobody wants it. If you are moving forward, writing code and fixing bugs constantly, time is on your side. Watch out when your competition fires at you. Do they just want to force you to keep busy reacting to their volleys, so you can't move forward?
+
+Think of the history of data access strategies to come out of Microsoft. ODBC, RDO, DAO, ADO, OLEDB, now ADO.NET - All New! Are these technological imperatives? The result of an incompetent design group that needs to reinvent data access every goddamn year? (That's probably it, actually.) But the end result is just cover fire. The competition has no choice but to spend all their time porting and keeping up, time that they can't spend writing new features. Look closely at the software landscape. The companies that do well are the ones who rely least on big companies and don't have to spend all their cycles catching up and reimplementing and fixing bugs that crop up only on Windows XP. The companies who stumble are the ones who spend too much time reading tea leaves to figure out the future direction of Microsoft. People get worried about .NET and decide to rewrite their whole architecture for .NET because they think they have to. Microsoft is shooting at you, and it's just cover fire so that they can move forward and you can't, because this is how the game is played, Bubby. Are you going to support Hailstorm? SOAP? RDF? Are you supporting it because your customers need it, or because someone is firing at you and you feel like you have to respond? The sales teams of the big companies understand cover fire. They go into their customers and say, "OK, you don't have to buy from us. Buy from the best vendor. But make sure that you get a product that supports (XML / SOAP / CDE / J2EE) because otherwise you'll be Locked In The Trunk." Then when the little companies try to sell into that account, all they hear is obedient CTOs parrotting "Do you have J2EE?" And they have to waste all their time building in J2EE even if it doesn't really make any sales, and gives them no opportunity to distinguish themselves. It's a checkbox feature -- you do it because you need the checkbox saying you have it, but nobody will use it or needs it. And it's cover fire.
+
+Fire and Motion, for small companies like mine, means two things. You have to have time on your side, and you have to move forward every day. Sooner or later you will win. All I managed to do yesterday is improve the color scheme in FogBUGZ just a little bit. That's OK. It's getting better all the time. Every day our software is better and better and we have more and more customers and that's all that matters. Until we're a company the size of Oracle, we don't have to think about grand strategies. We just have to come in every morning and somehow, launch the editor.
+
+The Iceberg Secret, Revealed
+by Joel Spolsky
+Wednesday, February 13, 2002
+"I don't know what's wrong with my development team," the CEO thinks to himself. "Things were going so well when we started this project. For the first couple of weeks, the team cranked like crazy and got a great prototype working. But since then, things seem to have slowed to a crawl. They're just not working hard any more." He chooses a Callaway Titanium Driver and sends the caddy to fetch an ice-cold lemonade. "Maybe if I fire a couple of laggards that'll light a fire under them!"
+
+Meanwhile, of course, the development team has no idea that anything's wrong. In fact, nothing is wrong. They're right on schedule.
+
+Don't let this happen to you! I'm going to let you in on a little secret about those non-technical management types that will make your life a million times easier. It's real simple. Once you know my secret, you'll never have trouble working with non-technical managers again (unless you get into an argument over the coefficient of restitution of their golf clubs).
+
+It's pretty clear that programmers think in one language, and MBAs think in another. I've been thinking about the problem of communication in software management for a while, because it's pretty clear to me that the power and rewards accrue to those rare individuals who know how to translate between Programmerese and MBAese.
+
+[Image]
+Since I started working in the software industry, almost all the software I've worked on has been what might be called "speculative" software. That is, the software is not being built for a particular customer -- it's being built in hopes that zillions of people will buy it. But many software developers don't have that luxury. They may be consultants developing a project for a single client, or they may be in-house programmers working on a complicated corporate whatsit for Accounting (or whatever it is you in-house programmers do; it's rather mysterious to me).
+
+Have you ever noticed that on these custom projects, the single most common cause of overruns, failures, and general miserableness always boils down to, basically, "the (insert expletive here) customer didn't know what they wanted?"
+
+Here are three versions of the same pathology:
+
+"The damn customer kept changing his mind. First he wanted Client/Server. Then he read about XML in Delta Airlines Inflight Magazine and decided he had to have XML. Now we're rewriting the thing to use fleets of small Lego Mindstorms Robots."
+"We built it exactly the way they wanted. The contract specified the whole thing down to the smallest detail. We delivered exactly what the contract said. But when we delivered it, they were crestfallen."
+"Our miserable sales person agreed to a fixed price contract to build what was basically unspecified, and the customer's lawyers were sharp enough to get a clause in the contract that they don't have to pay us until 'acceptance by customer,' so we had to put a team of nine developers on their project for two years and only got paid $800."
+If there's one thing every junior consultant needs to have injected into their head with a heavy duty 2500 RPM DeWalt Drill, it's this: Customers Don't Know What They Want. Stop Expecting Customers to Know What They Want. It's just never going to happen. Get over it.
+
+Instead, assume that you're going to have to build something anyway, and the customer is going to have to like it, but they're going to be a little bit surprised. YOU have to do the research. YOU have to figure out a design that solves the problem that the customer has in a pleasing way.
+
+Put yourself in their shoes. Imagine that you've just made $100,000,000 selling your company to Yahoo!, and you've decided that it's about time to renovate your kitchen. So you hire an expert architect with instructions to make it "as cool as Will and Grace's Kitchen." You have no idea how to accomplish this. You don't know that you want a Viking stove and a Subzero refrigerator -- these are not words in your vocabulary. You want the architect to do something good, that's why you hired him.
+
+The Extreme Programming folks say that the solution to this is to get the customer in the room and involve them in the design process every step of the way, as a member of the development team. This is, I think, a bit too "extreme." It's as if my architect made me show up while they were designing the kitchen and asked me to provide input on every little detail. It's boring for me, if I wanted to be an architect I would have become an architect.
+
+Anyway, you don't really want a customer on your team, do you? The customer-nominee is just as likely to wind up being some poor dweeb from Accounts Payable who got sent to work with the programmers because he was the slowest worker over there and they would barely notice his absence. And you're just going to spend all your design time explaining things in words of one syllable.
+
+Assume that your customers don't know what they want. Design it yourself, based on your understanding of the domain. If you need to spend some time learning about the domain or if you need a domain expert to help you, that's fine, but the design of the software is your job. If you do your domain homework and create a good UI, the customer will be pleased.
+
+Now, I promised to tell you a secret about translating between the language of the customers (or nontechnical managers) of your software and the language of programmers.
+
+You know how an iceberg is 90% underwater? Well, most software is like that too -- there's a pretty user interface that takes about 10% of the work, and then 90% of the programming work is under the covers. And if you take into account the fact that about half of your time is spent fixing bugs, the UI only takes 5% of the work. And if you limit yourself to the visual part of the UI, the pixels, what you would see in PowerPoint, now we're talking less than 1%.
+
+That's not the secret. The secret is that People Who Aren't Programmers Do Not Understand This.
+
+There are some very, very important corollaries to the Iceberg Secret.
+
+Important Corollary One. If you show a nonprogrammer a screen which has a user interface that is 90% worse, they will think that the program is 90% worse.
+
+I learned this lesson as a consultant, when I did a demo of a major web-based project for a client's executive team. The project was almost 100% code complete. We were still waiting for the graphic designer to choose fonts and colors and draw the cool 3-D tabs. In the meantime, we just used plain fonts and black and white, there was a bunch of ugly wasted space on the screen, basically it didn't look very good at all. But 100% of the functionality was there and was doing some pretty amazing stuff.
+
+What happened during the demo? The clients spent the entire meeting griping about the graphical appearance of the screen. They weren't even talking about the UI. Just the graphical appearance. "It just doesn't look slick," complained their project manager. That's all they could think about. We couldn't get them to think about the actual functionality. Obviously fixing the graphic design took about one day. It was almost as if they thought they had hired painters.
+
+Important Corollary Two. If you show a nonprogrammer a screen which has a user interface which is 100% beautiful, they will think the program is almost done.
+
+People who aren't programmers are just looking at the screen and seeing some pixels. And if the pixels look like they make up a program which does something, they think "oh, gosh, how much harder could it be to make it actually work?"
+
+The big risk here is that if you mock up the UI first, presumably so you can get some conversations going with the customer, then everybody's going to think you're almost done. And then when you spend the next year working "under the covers," so to speak, nobody will really see what you're doing and they'll think it's nothing.
+
+Important Corollary Three. The dotcom that has the cool, polished looking web site and about four web pages will get a higher valuation than the highly functional dotcom with 3700 years of archives and a default grey background.
+
+Oh, wait, dotcoms aren't worth anything any more. Never mind.
+
+Important Corollary Four. When politics demands that various nontechnical managers or customers "sign off" on a project, give them several versions of the graphic design to choose from.
+
+Vary the placement of some things, change the look and feel and fonts, move the logo and make it bigger or smaller. Let them feel important by giving them non-crucial lipstick-on-a-chicken stuff to muck around with. They can't do much damage to your schedule here. A good interior decorator is constantly bringing their client swatches and samples and stuff to choose from. But they would never discuss dishwasher placement with the client. It goes next to the sink, no matter what the client wants. There's no sense wasting time arguing about where the dishwasher goes, it has to go next to the sink, don't even bring it up; let the clients get their design kicks doing some harmless thing like changing their mind 200 times about whether to use Italian Granite or Mexican Tiles or Norwegian wood butcher-block for the countertops.
+
+Important Corollary Five. When you're showing off, the only thing that matters is the screen shot. Make it 100% beautiful.
+
+Don't, for a minute, think that you can get away with asking anybody to imagine how cool this would be. Don't think that they're looking at the functionality. They're not. They want to see pretty pixels.
+
+Steve Jobs understands this. Oh boy does he understand this. Engineers at Apple have learned to do things that make for great screen shots, like the gorgeous new 1024x1024 icons in the dock, even if they waste valuable real estate. And the Linux desktop crowd goes crazy about semitransparent xterms, which make for good screenshots but are usually annoying to use. Every time Gnome or KDE announces a new release I go straight to the screenshots and say, "oh, they changed the planet from Jupiter to Saturn. Cool." Never mind what they really did.
+
+Remember the CEO at the beginning of this article? He was unhappy because his team had showed him great PowerPoints at the beginning -- mockups, created in Photoshop, not even VB. And now that they're actually getting stuff done under the covers, it looks like they're not doing anything.
+
+What can you do about this? Once you understand the Iceberg Secret, it's easy to work with it. Understand that any demos you do in a darkened room with a projector are going to be all about pixels. If you can, build your UI in such a way that unfinished parts look unfinished. For example, use scrawls for the icons on the toolbar until the functionality is there. As you're building your web service, you may want to consider actually leaving out features from the home page until those features are built. That way people can watch the home page go from 3 commands to 20 commands as more things get built.
+
+More importantly, make sure you control what people think about the schedule. Provide a detailed schedule in Excel format. Every week, send out self-congratulatory email talking about how you've moved from 32% complete to 35% complete and are on track to ship on December 25th. Make sure that the actual facts dominate any thinking about whether the project is moving forward at the right speed. And don't let your boss use Callaway Titanium Drivers, I don't care how much you want him to win, the USGA has banned them and it's just not fair.
+
+The Law of Leaky Abstractions
+by Joel Spolsky
+Monday, November 11, 2002
+There's a key piece of magic in the engineering of the Internet which you rely on every single day. It happens in the TCP protocol, one of the fundamental building blocks of the Internet.
+
+TCP is a way to transmit data that is reliable. By this I mean: if you send a message over a network using TCP, it will arrive, and it won't be garbled or corrupted.
+
+We use TCP for many things like fetching web pages and sending email. The reliability of TCP is why every exciting email from embezzling East Africans arrives in letter-perfect condition. O joy.
+
+By comparison, there is another method of transmitting data called IP which is unreliable. Nobody promises that your data will arrive, and it might get messed up before it arrives. If you send a bunch of messages with IP, don't be surprised if only half of them arrive, and some of those are in a different order than the order in which they were sent, and some of them have been replaced by alternate messages, perhaps containing pictures of adorable baby orangutans, or more likely just a lot of unreadable garbage that looks like the subject line of Taiwanese spam.
+
+Here's the magic part: TCP is built on top of IP. In other words, TCP is obliged to somehow send data reliably using only an unreliable tool.
+
+To illustrate why this is magic, consider the following morally equivalent, though somewhat ludicrous, scenario from the real world.
+
+Imagine that we had a way of sending actors from Broadway to Hollywood that involved putting them in cars and driving them across the country. Some of these cars crashed, killing the poor actors. Sometimes the actors got drunk on the way and shaved their heads or got nasal tattoos, thus becoming too ugly to work in Hollywood, and frequently the actors arrived in a different order than they had set out, because they all took different routes. Now imagine a new service called Hollywood Express, which delivered actors to Hollywood, guaranteeing that they would (a) arrive (b) in order (c) in perfect condition. The magic part is that Hollywood Express doesn't have any method of delivering the actors, other than the unreliable method of putting them in cars and driving them across the country. Hollywood Express works by checking that each actor arrives in perfect condition, and, if he doesn't, calling up the home office and requesting that the actor's identical twin be sent instead. If the actors arrive in the wrong order Hollywood Express rearranges them. If a large UFO on its way to Area 51 crashes on the highway in Nevada, rendering it impassable, all the actors that went that way are rerouted via Arizona and Hollywood Express doesn't even tell the movie directors in California what happened. To them, it just looks like the actors are arriving a little bit more slowly than usual, and they never even hear about the UFO crash.
+
+That is, approximately, the magic of TCP. It is what computer scientists like to call an abstraction: a simplification of something much more complicated that is going on under the covers. As it turns out, a lot of computer programming consists of building abstractions. What is a string library? It's a way to pretend that computers can manipulate strings just as easily as they can manipulate numbers. What is a file system? It's a way to pretend that a hard drive isn't really a bunch of spinning magnetic platters that can store bits at certain locations, but rather a hierarchical system of folders-within-folders containing individual files that in turn consist of one or more strings of bytes.
+
+Back to TCP. Earlier for the sake of simplicity I told a little fib, and some of you have steam coming out of your ears by now because this fib is driving you crazy. I said that TCP guarantees that your message will arrive. It doesn't, actually. If your pet snake has chewed through the network cable leading to your computer, and no IP packets can get through, then TCP can't do anything about it and your message doesn't arrive. If you were curt with the system administrators in your company and they punished you by plugging you into an overloaded hub, only some of your IP packets will get through, and TCP will work, but everything will be really slow.
+
+This is what I call a leaky abstraction. TCP attempts to provide a complete abstraction of an underlying unreliable network, but sometimes, the network leaks through the abstraction and you feel the things that the abstraction can't quite protect you from. This is but one example of what I've dubbed the Law of Leaky Abstractions:
+
+All non-trivial abstractions, to some degree, are leaky.
+Abstractions fail. Sometimes a little, sometimes a lot. There's leakage. Things go wrong. It happens all over the place when you have abstractions. Here are some examples.
+
+Something as simple as iterating over a large two-dimensional array can have radically different performance if you do it horizontally rather than vertically, depending on the "grain of the wood" -- one direction may result in vastly more page faults than the other direction, and page faults are slow. Even assembly programmers are supposed to be allowed to pretend that they have a big flat address space, but virtual memory means it's really just an abstraction, which leaks when there's a page fault and certain memory fetches take way more nanoseconds than other memory fetches.
+The SQL language is meant to abstract away the procedural steps that are needed to query a database, instead allowing you to define merely what you want and let the database figure out the procedural steps to query it. But in some cases, certain SQL queries are thousands of times slower than other logically equivalent queries. A famous example of this is that some SQL servers are dramatically faster if you specify "where a=b and b=c and a=c" than if you only specify "where a=b and b=c" even though the result set is the same. You're not supposed to have to care about the procedure, only the specification. But sometimes the abstraction leaks and causes horrible performance and you have to break out the query plan analyzer and study what it did wrong, and figure out how to make your query run faster.
+Even though network libraries like NFS and SMB let you treat files on remote machines "as if" they were local, sometimes the connection becomes very slow or goes down, and the file stops acting like it was local, and as a programmer you have to write code to deal with this. The abstraction of "remote file is the same as local file" leaks. Here's a concrete example for Unix sysadmins. If you put users' home directories on NFS-mounted drives (one abstraction), and your users create .forward files to forward all their email somewhere else (another abstraction), and the NFS server goes down while new email is arriving, the messages will not be forwarded because the .forward file will not be found. The leak in the abstraction actually caused a few messages to be dropped on the floor.
+C++ string classes are supposed to let you pretend that strings are first-class data. They try to abstract away the fact that strings are hard and let you act as if they were as easy as integers. Almost all C++ string classes overload the + operator so you can write s + "bar" to concatenate. But you know what? No matter how hard they try, there is no C++ string class on Earth that will let you type "foo" + "bar", because string literals in C++ are always char*'s, never strings. The abstraction has sprung a leak that the language doesn't let you plug. (Amusingly, the history of the evolution of C++ over time can be described as a history of trying to plug the leaks in the string abstraction. Why they couldn't just add a native string class to the language itself eludes me at the moment.)
+And you can't drive as fast when it's raining, even though your car has windshield wipers and headlights and a roof and a heater, all of which protect you from caring about the fact that it's raining (they abstract away the weather), but lo, you have to worry about hydroplaning (or aquaplaning in England) and sometimes the rain is so strong you can't see very far ahead so you go slower in the rain, because the weather can never be completely abstracted away, because of the law of leaky abstractions.
+One reason the law of leaky abstractions is problematic is that it means that abstractions do not really simplify our lives as much as they were meant to. When I'm training someone to be a C++ programmer, it would be nice if I never had to teach them about char*'s and pointer arithmetic. It would be nice if I could go straight to STL strings. But one day they'll write the code "foo" + "bar", and truly bizarre things will happen, and then I'll have to stop and teach them all about char*'s anyway. Or one day they'll be trying to call a Windows API function that is documented as having an OUT LPTSTR argument and they won't be able to understand how to call it until they learn about char*'s, and pointers, and Unicode, and wchar_t's, and the TCHAR header files, and all that stuff that leaks up.
+
+In teaching someone about COM programming, it would be nice if I could just teach them how to use the Visual Studio wizards and all the code generation features, but if anything goes wrong, they will not have the vaguest idea what happened or how to debug it and recover from it. I'm going to have to teach them all about IUnknown and CLSIDs and ProgIDS and ... oh, the humanity!
+
+In teaching someone about ASP.NET programming, it would be nice if I could just teach them that they can double-click on things and then write code that runs on the server when the user clicks on those things. Indeed ASP.NET abstracts away the difference between writing the HTML code to handle clicking on a hyperlink (<a>) and the code to handle clicking on a button. Problem: the ASP.NET designers needed to hide the fact that in HTML, there's no way to submit a form from a hyperlink. They do this by generating a few lines of JavaScript and attaching an onclick handler to the hyperlink. The abstraction leaks, though. If the end-user has JavaScript disabled, the ASP.NET application doesn't work correctly, and if the programmer doesn't understand what ASP.NET was abstracting away, they simply won't have any clue what is wrong.
+
+The law of leaky abstractions means that whenever somebody comes up with a wizzy new code-generation tool that is supposed to make us all ever-so-efficient, you hear a lot of people saying "learn how to do it manually first, then use the wizzy tool to save time." Code generation tools which pretend to abstract out something, like all abstractions, leak, and the only way to deal with the leaks competently is to learn about how the abstractions work and what they are abstracting. So the abstractions save us time working, but they don't save us time learning.
+
+And all this means that paradoxically, even as we have higher and higher level programming tools with better and better abstractions, becoming a proficient programmer is getting harder and harder.
+
+During my first Microsoft internship, I wrote string libraries to run on the Macintosh. A typical assignment: write a version of strcat that returns a pointer to the end of the new string. A few lines of C code. Everything I did was right from K&R -- one thin book about the C programming language.
+
+Today, to work on CityDesk, I need to know Visual Basic, COM, ATL, C++, InnoSetup, Internet Explorer internals, regular expressions, DOM, HTML, CSS, and XML. All high level tools compared to the old K&R stuff, but I still have to know the K&R stuff or I'm toast.
+
+Ten years ago, we might have imagined that new programming paradigms would have made programming easier by now. Indeed, the abstractions we've created over the years do allow us to deal with new orders of complexity in software development that we didn't have to deal with ten or fifteen years ago, like GUI programming and network programming. And while these great tools, like modern OO forms-based languages, let us get a lot of work done incredibly quickly, suddenly one day we need to figure out a problem where the abstraction leaked, and it takes 2 weeks. And when you need to hire a programmer to do mostly VB programming, it's not good enough to hire a VB programmer, because they will get completely stuck in tar every time the VB abstraction leaks.
+
+The Law of Leaky Abstractions is dragging us down.
+
+The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)
+by Joel Spolsky
+Wednesday, October 08, 2003
+Ever wonder about that mysterious Content-Type tag? You know, the one you're supposed to put in HTML and you never quite know what it should be?
+
+Did you ever get an email from your friends in Bulgaria with the subject line "???? ?????? ??? ????"?
+
+I've been dismayed to discover just how many software developers aren't really completely up to speed on the mysterious world of character sets, encodings, Unicode, all that stuff. A couple of years ago, a beta tester for FogBUGZ was wondering whether it could handle incoming email in Japanese. Japanese? They have email in Japanese? I had no idea. When I looked closely at the commercial ActiveX control we were using to parse MIME email messages, we discovered it was doing exactly the wrong thing with character sets, so we actually had to write heroic code to undo the wrong conversion it had done and redo it correctly. When I looked into another commercial library, it, too, had a completely broken character code implementation. I corresponded with the developer of that package and he sort of thought they "couldn't do anything about it." Like many programmers, he just wished it would all blow over somehow.
+
+But it won't. When I discovered that the popular web development tool PHP has almost complete ignorance of character encoding issues, blithely using 8 bits for characters, making it darn near impossible to develop good international web applications, I thought, enough is enough.
+
+So I have an announcement to make: if you are a programmer working in 2003 and you don't know the basics of characters, character sets, encodings, and Unicode, and I catch you, I'm going to punish you by making you peel onions for 6 months in a submarine. I swear I will.
+
+And one more thing:
+
+IT'S NOT THAT HARD.
+
+In this article I'll fill you in on exactly what every working programmer should know. All that stuff about "plain text = ascii = characters are 8 bits" is not only wrong, it's hopelessly wrong, and if you're still programming that way, you're not much better than a medical doctor who doesn't believe in germs. Please do not write another line of code until you finish reading this article.
+
+Before I get started, I should warn you that if you are one of those rare people who knows about internationalization, you are going to find my entire discussion a little bit oversimplified. I'm really just trying to set a minimum bar here so that everyone can understand what's going on and can write code that has a hope of working with text in any language other than the subset of English that doesn't include words with accents. And I should warn you that character handling is only a tiny portion of what it takes to create software that works internationally, but I can only write about one thing at a time so today it's character sets.
+
+A Historical Perspective
+
+The easiest way to understand this stuff is to go chronologically.
+
+You probably think I'm going to talk about very old character sets like EBCDIC here. Well, I won't. EBCDIC is not relevant to your life. We don't have to go that far back in time.
+
+ASCII tableBack in the semi-olden days, when Unix was being invented and K&R were writing The C Programming Language, everything was very simple. EBCDIC was on its way out. The only characters that mattered were good old unaccented English letters, and we had a code for them called ASCII which was able to represent every character using a number between 32 and 127. Space was 32, the letter "A" was 65, etc. This could conveniently be stored in 7 bits. Most computers in those days were using 8-bit bytes, so not only could you store every possible ASCII character, but you had a whole bit to spare, which, if you were wicked, you could use for your own devious purposes: the dim bulbs at WordStar actually turned on the high bit to indicate the last letter in a word, condemning WordStar to English text only. Codes below 32 were called unprintable and were used for cussing. Just kidding. They were used for control characters, like 7 which made your computer beep and 12 which caused the current page of paper to go flying out of the printer and a new one to be fed in.
+
+And all was good, assuming you were an English speaker.
+
+Because bytes have room for up to eight bits, lots of people got to thinking, "gosh, we can use the codes 128-255 for our own purposes." The trouble was, lots of people had this idea at the same time, and they had their own ideas of what should go where in the space from 128 to 255. The IBM-PC had something that came to be known as the OEM character set which provided some accented characters for European languages and a bunch of line drawing characters... horizontal bars, vertical bars, horizontal bars with little dingle-dangles dangling off the right side, etc., and you could use these line drawing characters to make spiffy boxes and lines on the screen, which you can still see running on the 8088 computer at your dry cleaners'. In fact  as soon as people started buying PCs outside of America all kinds of different OEM character sets were dreamed up, which all used the top 128 characters for their own purposes. For example on some PCs the character code 130 would display as é, but on computers sold in Israel it was the Hebrew letter Gimel (ג), so when Americans would send their résumés to Israel they would arrive as rגsumגs. In many cases, such as Russian, there were lots of different ideas of what to do with the upper-128 characters, so you couldn't even reliably interchange Russian documents.
+
+Eventually this OEM free-for-all got codified in the ANSI standard. In the ANSI standard, everybody agreed on what to do below 128, which was pretty much the same as ASCII, but there were lots of different ways to handle the characters from 128 and on up, depending on where you lived. These different systems were called code pages. So for example in Israel DOS used a code page called 862, while Greek users used 737. They were the same below 128 but different from 128 up, where all the funny letters resided. The national versions of MS-DOS had dozens of these code pages, handling everything from English to Icelandic and they even had a few "multilingual" code pages that could do Esperanto and Galician on the same computer! Wow! But getting, say, Hebrew and Greek on the same computer was a complete impossibility unless you wrote your own custom program that displayed everything using bitmapped graphics, because Hebrew and Greek required different code pages with different interpretations of the high numbers.
+
+Meanwhile, in Asia, even more crazy things were going on to take into account the fact that Asian alphabets have thousands of letters, which were never going to fit into 8 bits. This was usually solved by the messy system called DBCS, the "double byte character set" in which some letters were stored in one byte and others took two. It was easy to move forward in a string, but dang near impossible to move backwards. Programmers were encouraged not to use s++ and s-- to move backwards and forwards, but instead to call functions such as Windows' AnsiNext and AnsiPrev which knew how to deal with the whole mess.
+
+But still, most people just pretended that a byte was a character and a character was 8 bits and as long as you never moved a string from one computer to another, or spoke more than one language, it would sort of always work. But of course, as soon as the Internet happened, it became quite commonplace to move strings from one computer to another, and the whole mess came tumbling down. Luckily, Unicode had been invented.
+
+Unicode
+
+Unicode was a brave effort to create a single character set that included every reasonable writing system on the planet and some make-believe ones like Klingon, too. Some people are under the misconception that Unicode is simply a 16-bit code where each character takes 16 bits and therefore there are 65,536 possible characters. This is not, actually, correct. It is the single most common myth about Unicode, so if you thought that, don't feel bad.
+
+In fact, Unicode has a different way of thinking about characters, and you have to understand the Unicode way of thinking of things or nothing will make sense.
+
+Until now, we've assumed that a letter maps to some bits which you can store on disk or in memory:
+
+A -> 0100 0001
+
+In Unicode, a letter maps to something called a code point which is still just a theoretical concept. How that code point is represented in memory or on disk is a whole nuther story.
+
+In Unicode, the letter A is a platonic ideal. It's just floating in heaven:
+
+A
+
+This platonic A is different than B, and different from a, but the same as A and A and A. The idea that A in a Times New Roman font is the same character as the A in a Helvetica font, but different from "a" in lower case, does not seem very controversial, but in some languages just figuring out what a letter is can cause controversy. Is the German letter ß a real letter or just a fancy way of writing ss? If a letter's shape changes at the end of the word, is that a different letter? Hebrew says yes, Arabic says no. Anyway, the smart people at the Unicode consortium have been figuring this out for the last decade or so, accompanied by a great deal of highly political debate, and you don't have to worry about it. They've figured it all out already.
+
+Every platonic letter in every alphabet is assigned a magic number by the Unicode consortium which is written like this: U+0639.  This magic number is called a code point. The U+ means "Unicode" and the numbers are hexadecimal. U+0639 is the Arabic letter Ain. The English letter A would be U+0041. You can find them all using the charmap utility on Windows 2000/XP or visiting the Unicode web site.
+
+There is no real limit on the number of letters that Unicode can define and in fact they have gone beyond 65,536 so not every unicode letter can really be squeezed into two bytes, but that was a myth anyway.
+
+OK, so say we have a string:
+
+Hello
+
+which, in Unicode, corresponds to these five code points:
+
+U+0048 U+0065 U+006C U+006C U+006F.
+
+Just a bunch of code points. Numbers, really. We haven't yet said anything about how to store this in memory or represent it in an email message.
+
+Encodings
+
+That's where encodings come in.
+
+The earliest idea for Unicode encoding, which led to the myth about the two bytes, was, hey, let's just store those numbers in two bytes each. So Hello becomes
+
+00 48 00 65 00 6C 00 6C 00 6F
+
+Right? Not so fast! Couldn't it also be:
+
+48 00 65 00 6C 00 6C 00 6F 00 ?
+
+Well, technically, yes, I do believe it could, and, in fact, early implementors wanted to be able to store their Unicode code points in high-endian or low-endian mode, whichever their particular CPU was fastest at, and lo, it was evening and it was morning and there were already two ways to store Unicode. So the people were forced to come up with the bizarre convention of storing a FE FF at the beginning of every Unicode string; this is called a Unicode Byte Order Mark and if you are swapping your high and low bytes it will look like a FF FE and the person reading your string will know that they have to swap every other byte. Phew. Not every Unicode string in the wild has a byte order mark at the beginning.
+
+
+
+For a while it seemed like that might be good enough, but programmers were complaining. "Look at all those zeros!" they said, since they were Americans and they were looking at English text which rarely used code points above U+00FF. Also they were liberal hippies in California who wanted to conserve (sneer). If they were Texans they wouldn't have minded guzzling twice the number of bytes. But those Californian wimps couldn't bear the idea of doubling the amount of storage it took for strings, and anyway, there were already all these doggone documents out there using various ANSI and DBCS character sets and who's going to convert them all? Moi? For this reason alone most people decided to ignore Unicode for several years and in the meantime things got worse.
+
+Thus was invented the brilliant concept of UTF-8. UTF-8 was another system for storing your string of Unicode code points, those magic U+ numbers, in memory using 8 bit bytes. In UTF-8, every code point from 0-127 is stored in a single byte. Only code points 128 and above are stored using 2, 3, in fact, up to 6 bytes.
+
+How UTF-8 works
+
+This has the neat side effect that English text looks exactly the same in UTF-8 as it did in ASCII, so Americans don't even notice anything wrong. Only the rest of the world has to jump through hoops. Specifically, Hello, which was U+0048 U+0065 U+006C U+006C U+006F, will be stored as 48 65 6C 6C 6F, which, behold! is the same as it was stored in ASCII, and ANSI, and every OEM character set on the planet. Now, if you are so bold as to use accented letters or Greek letters or Klingon letters, you'll have to use several bytes to store a single code point, but the Americans will never notice. (UTF-8 also has the nice property that ignorant old string-processing code that wants to use a single 0 byte as the null-terminator will not truncate strings).
+
+So far I've told you three ways of encoding Unicode. The traditional store-it-in-two-byte methods are called UCS-2 (because it has two bytes) or UTF-16 (because it has 16 bits), and you still have to figure out if it's high-endian UCS-2 or low-endian UCS-2. And there's the popular new UTF-8 standard which has the nice property of also working respectably if you have the happy coincidence of English text and braindead programs that are completely unaware that there is anything other than ASCII.
+
+There are actually a bunch of other ways of encoding Unicode. There's something called UTF-7, which is a lot like UTF-8 but guarantees that the high bit will always be zero, so that if you have to pass Unicode through some kind of draconian police-state email system that thinks 7 bits are quite enough, thank you it can still squeeze through unscathed. There's UCS-4, which stores each code point in 4 bytes, which has the nice property that every single code point can be stored in the same number of bytes, but, golly, even the Texans wouldn't be so bold as to waste that much memory.
+
+And in fact now that you're thinking of things in terms of platonic ideal letters which are represented by Unicode code points, those unicode code points can be encoded in any old-school encoding scheme, too! For example, you could encode the Unicode string for Hello (U+0048 U+0065 U+006C U+006C U+006F) in ASCII, or the old OEM Greek Encoding, or the Hebrew ANSI Encoding, or any of several hundred encodings that have been invented so far, with one catch: some of the letters might not show up! If there's no equivalent for the Unicode code point you're trying to represent in the encoding you're trying to represent it in, you usually get a little question mark: ? or, if you're really good, a box. Which did you get? -> �
+
+There are hundreds of traditional encodings which can only store some code points correctly and change all the other code points into question marks. Some popular encodings of English text are Windows-1252 (the Windows 9x standard for Western European languages) and ISO-8859-1, aka Latin-1 (also useful for any Western European language). But try to store Russian or Hebrew letters in these encodings and you get a bunch of question marks. UTF 7, 8, 16, and 32 all have the nice property of being able to store any code point correctly.
+
+The Single Most Important Fact About Encodings
+
+If you completely forget everything I just explained, please remember one extremely important fact. It does not make sense to have a string without knowing what encoding it uses. You can no longer stick your head in the sand and pretend that "plain" text is ASCII.
+
+There Ain't No Such Thing As Plain Text.
+
+If you have a string, in memory, in a file, or in an email message, you have to know what encoding it is in or you cannot interpret it or display it to users correctly.
+
+Almost every stupid "my website looks like gibberish" or "she can't read my emails when I use accents" problem comes down to one naive programmer who didn't understand the simple fact that if you don't tell me whether a particular string is encoded using UTF-8 or ASCII or ISO 8859-1 (Latin 1) or Windows 1252 (Western European), you simply cannot display it correctly or even figure out where it ends. There are over a hundred encodings and above code point 127, all bets are off.
+
+How do we preserve this information about what encoding a string uses? Well, there are standard ways to do this. For an email message, you are expected to have a string in the header of the form
+
+Content-Type: text/plain; charset="UTF-8"
+
+For a web page, the original idea was that the web server would return a similar Content-Type http header along with the web page itself -- not in the HTML itself, but as one of the response headers that are sent before the HTML page. 
+
+This causes problems. Suppose you have a big web server with lots of sites and hundreds of pages contributed by lots of people in lots of different languages and all using whatever encoding their copy of Microsoft FrontPage saw fit to generate. The web server itself wouldn't really know what encoding each file was written in, so it couldn't send the Content-Type header.
+
+It would be convenient if you could put the Content-Type of the HTML file right in the HTML file itself, using some kind of special tag. Of course this drove purists crazy... how can you read the HTML file until you know what encoding it's in?! Luckily, almost every encoding in common use does the same thing with characters between 32 and 127, so you can always get this far on the HTML page without starting to use funny letters:
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+But that meta tag really has to be the very first thing in the <head> section because as soon as the web browser sees this tag it's going to stop parsing the page and start over after reinterpreting the whole page using the encoding you specified.
+
+What do web browsers do if they don't find any Content-Type, either in the http headers or the meta tag? Internet Explorer actually does something quite interesting: it tries to guess, based on the frequency in which various bytes appear in typical text in typical encodings of various languages, what language and encoding was used. Because the various old 8 bit code pages tended to put their national letters in different ranges between 128 and 255, and because every human language has a different characteristic histogram of letter usage, this actually has a chance of working. It's truly weird, but it does seem to work often enough that naïve web-page writers who never knew they needed a Content-Type header look at their page in a web browser and it looks ok, until one day, they write something that doesn't exactly conform to the letter-frequency-distribution of their native language, and Internet Explorer decides it's Korean and displays it thusly, proving, I think, the point that Postel's Law about being "conservative in what you emit and liberal in what you accept" is quite frankly not a good engineering principle. Anyway, what does the poor reader of this website, which was written in Bulgarian but appears to be Korean (and not even cohesive Korean), do? He uses the View | Encoding menu and tries a bunch of different encodings (there are at least a dozen for Eastern European languages) until the picture comes in clearer. If he knew to do that, which most people don't.
+
+
+
+For the latest version of CityDesk, the web site management software published by my company, we decided to do everything internally in UCS-2 (two byte) Unicode, which is what Visual Basic, COM, and Windows NT/2000/XP use as their native string type. In C++ code we just declare strings as wchar_t ("wide char") instead of char and use the wcs functions instead of the str functions (for example wcscat and wcslen instead of strcat and strlen). To create a literal UCS-2 string in C code you just put an L before it as so: L"Hello".
+
+When CityDesk publishes the web page, it converts it to UTF-8 encoding, which has been well supported by web browsers for many years. That's the way all 29 language versions of Joel on Software are encoded and I have not yet heard a single person who has had any trouble viewing them.
+
+This article is getting rather long, and I can't possibly cover everything there is to know about character encodings and Unicode, but I hope that if you've read this far, you know enough to go back to programming, using antibiotics instead of leeches and spells, a task to which I will leave you now.
+
+How Microsoft Lost the API War
+by Joel Spolsky
+Sunday, June 13, 2004
+Here's a theory you hear a lot these days: "Microsoft is finished. As soon as Linux makes some inroads on the desktop and web applications replace desktop applications, the mighty empire will topple."
+
+Although there is some truth to the fact that Linux is a huge threat to Microsoft, predictions of the Redmond company's demise are, to say the least, premature. Microsoft has an incredible amount of cash money in the bank and is still incredibly profitable. It has a long way to fall. It could do everything wrong for a decade before it started to be in remote danger, and you never know... they could reinvent themselves as a shaved-ice company at the last minute. So don't be so quick to write them off. In the early 90s everyone thought IBM was completely over: mainframes were history! Back then, Robert X. Cringely predicted that the era of the mainframe would end on January 1, 2000 when all the applications written in COBOL would seize up, and rather than fix those applications, for which, allegedly, the source code had long since been lost, everybody would rewrite those applications for client-server platforms.
+
+Well, guess what. Mainframes are still with us,  nothing happened on January 1, 2000, and IBM reinvented itself as a big ol' technology consulting company that also happens to make cheap plastic telephones. So extrapolating from a few data points to the theory that Microsoft is finished is really quite a severe exaggeration.
+
+However, there is a less understood phenomenon which is going largely unnoticed: Microsoft's crown strategic jewel, the Windows API, is lost. The cornerstone of Microsoft's monopoly power and incredibly profitable Windows and Office franchises, which account for virtually all of Microsoft's income and covers up a huge array of unprofitable or marginally profitable product lines, the Windows API  is no longer of much interest to developers. The goose that lays the golden eggs is not quite dead, but it does have a terminal disease, one that nobody noticed yet.
+
+Now that I've said that, allow me to apologize for the grandiloquence and pomposity of that preceding paragraph. I think I'm starting to sound like those editorial writers in the trade rags who go on and on about Microsoft's strategic asset, the Windows API. It's going to take me a few pages, here, to explain what I'm really talking about and justify my arguments. Please don't jump to any conclusions until I explain what I'm talking about. This will be a long article. I need to explain what the Windows API is; I need to demonstrate why it's the most important strategic asset to Microsoft; I need to explain how it was lost and what the implications of that are in the long term. And because I'm talking about big trends, I need to exaggerate and generalize.
+
+Developers, Developers, Developers, Developers
+Remember the definition of an operating system? It's the thing that manages a computer's resources so that application programs can run. People don't really care much about operating systems; they care about those application programs that the operating system makes possible. Word Processors. Instant Messaging. Email. Accounts Payable. Web sites with pictures of Paris Hilton. By itself, an operating system is not that useful. People buy operating systems because of the useful applications that run on it. And therefore the most useful operating system is the one that has the most useful applications.
+
+The logical conclusion of this is that if you're trying to sell operating systems, the most important thing to do is make software developers want to develop software for your operating system. That's why Steve Ballmer was jumping around the stage shouting "Developers, developers, developers, developers." It's so important for Microsoft that the only reason they don't outright give away development tools for Windows is because they don't want to inadvertently cut off the oxygen to competitive development tools vendors (well, those that are left) because having a variety of development tools available for their platform makes it that much more attractive to developers. But they really want to give away the development tools. Through their Empower ISV program you can get five complete sets of MSDN Universal (otherwise known as "basically every Microsoft product except Flight Simulator") for about $375. Command line compilers for the .NET languages are included with the free .NET runtime... also free. The C++ compiler is now free. Anything to encourage developers to build for the .NET platform, and holding just short of wiping out companies like Borland.
+
+Why Apple and Sun Can't Sell Computers
+Well, of course, that's a little bit silly: of course Apple and Sun can sell computers, but not to the two most lucrative markets for computers, namely, the corporate desktop and the home computer. Apple is still down there in the very low single digits of market share and the only people with Suns on their desktops are at Sun. (Please understand that I'm talking about large trends here, and therefore when I say things like "nobody" I really mean "fewer than 10,000,000 people," and so on and so forth.)
+
+Why? Because Apple and Sun computers don't run Windows programs, or, if they do, it's in some kind of expensive emulation mode that doesn't work so great. Remember, people buy computers for the applications that they run, and there's so much more great desktop software available for Windows than Mac that it's very hard to be a Mac user.
+
+Sidebar What is this "API" thing?
+
+If you're writing a program, say, a word processor, and you want to display a menu, or write a file, you have to ask the operating system to do it for you, using a very specific set of function calls which are different on every operating system. These function calls are called the API: it's the interface that an operating system, like Windows, provides to application developers, like the programmers building word processors and spreadsheets and whatnot. It's a set of thousands and thousands of detailed and fussy functions and subroutines that programmers can use, which cause the operating system to do interesting things like display a menu, read and write files, and more esoteric things like find out how to spell out a given date in Serbian, or extremely complex things like display a web page in a window. If your program uses the API calls for Windows, it's not going to work on Linux, which has different API calls. Sometimes they do approximately the same thing. That's one important reason Windows software doesn't run on Linux. If you wanted to get a Windows program to run under Linux, you'd have to reimplement the entire Windows API, which consists of thousands of complicated functions: this is almost as much work as implementing Windows itself, something which took Microsoft thousands of person-years. And if you make one tiny mistake or leave out one function that an application needs, that application will crash.
+And that's why the Windows API is such an important asset to Microsoft.
+
+(I know, I know, at this point the 2.3% of the world that uses Macintoshes are warming up their email programs to send me a scathing letter about how much they love their Macs. Once again, I'm speaking in large trends and generalizing, so don't waste your time. I know you love your Mac. I know it runs everything you need. I love you, you're a Pepper, but you're only 2.3% of the world, so this article isn't about you.)
+
+The Two Forces at Microsoft
+There are two opposing forces inside Microsoft, which I will refer to, somewhat tongue-in-cheek, as The Raymond Chen Camp and The MSDN Magazine Camp.
+
+Raymond Chen is a developer on the Windows team at Microsoft. He's been there since 1992, and his weblog The Old New Thing is chock-full of detailed technical stories about why certain things are the way they are in Windows, even silly things, which turn out to have very good reasons.
+
+The most impressive things to read on Raymond's weblog are the stories of the incredible efforts the Windows team has made over the years to support backwards compatibility:
+
+Look at the scenario from the customer's standpoint. You bought programs X, Y and Z. You then upgraded to Windows XP. Your computer now crashes randomly, and program Z doesn't work at all. You're going to tell your friends, "Don't upgrade to Windows XP. It crashes randomly, and it's not compatible with program Z." Are you going to debug your system to determine that program X is causing the crashes, and that program Z doesn't work because it is using undocumented window messages? Of course not. You're going to return the Windows XP box for a refund. (You bought programs X, Y, and Z some months ago. The 30-day return policy no longer applies to them. The only thing you can return is Windows XP.)
+
+I first heard about this from one of the developers of the hit game SimCity, who told me that there was a critical bug in his application: it used memory right after freeing it, a major no-no that happened to work OK on DOS but would not work under Windows where memory that is freed is likely to be snatched up by another running application right away. The testers on the Windows team were going through various popular applications, testing them to make sure they worked OK, but SimCity kept crashing. They reported this to the Windows developers, who disassembled SimCity, stepped through it in a debugger, found the bug, and added special code that checked if SimCity was running, and if it did, ran the memory allocator in a special mode in which you could still use memory after freeing it.
+
+This was not an unusual case. The Windows testing team is huge and one of their most important responsibilities is guaranteeing that everyone can safely upgrade their operating system, no matter what applications they have installed, and those applications will continue to run, even if those applications do bad things or use undocumented functions or rely on buggy behavior that happens to be buggy in Windows n but is no longer buggy in Windows n+1. In fact if you poke around in the AppCompatibility section of your registry you'll see a whole list of applications that Windows treats specially, emulating various old bugs and quirky behaviors so they'll continue to work. Raymond Chen writes, "I get particularly furious when people accuse Microsoft of maliciously breaking applications during OS upgrades. If any application failed to run on Windows 95, I took it as a personal failure. I spent many sleepless nights fixing bugs in third-party programs just so they could keep running on Windows 95."
+
+A lot of developers and engineers don't agree with this way of working. If the application did something bad, or relied on some undocumented behavior, they think, it should just break when the OS gets upgraded. The developers of the Macintosh OS at Apple have always been in this camp. It's why so few applications from the early days of the Macintosh still work. For example, a lot of developers used to try to make their Macintosh applications run faster by copying pointers out of the jump table and calling them directly instead of using the interrupt feature of the processor like they were supposed to. Even though somewhere in Inside Macintosh, Apple's official Bible of Macintosh programming, there was a tech note saying "you can't do this," they did it, and it worked, and their programs ran faster... until the next version of the OS came out and they didn't run at all. If the company that made the application went out of business (and most of them did), well, tough luck, bubby.
+
+To contrast, I've got DOS applications that I wrote in 1983 for the very original IBM PC that still run flawlessly, thanks to the Raymond Chen Camp at Microsoft. I know, it's not just Raymond, of course: it's the whole modus operandi of the core Windows API team. But Raymond has publicized it the most through his excellent website The Old New Thing so I'll name it after him.
+
+That's one camp. The other camp is what I'm going to call the MSDN Magazine camp, which I will name after the developer's magazine full of exciting articles about all the different ways you can shoot yourself in the foot by using esoteric combinations of Microsoft products in your own software. The MSDN Magazine Camp is always trying to convince you to use new and complicated external technology like COM+, MSMQ, MSDE, Microsoft Office, Internet Explorer and its components, MSXML, DirectX (the very latest version, please), Windows Media Player, and Sharepoint... Sharepoint! which nobody has; a veritable panoply of external dependencies each one of which is going to be a huge headache when you ship your application to a paying customer and it doesn't work right. The technical name for this is DLL Hell. It works here: why doesn't it work there?
+
+The Raymond Chen Camp believes in making things easy for developers by making it easy to write once and run anywhere (well, on any Windows box). The MSDN Magazine Camp believes in making things easy for developers by giving them really powerful chunks of code which they can leverage, if they are willing to pay the price of incredibly complicated deployment and installation headaches, not to mention the huge learning curve. The Raymond Chen camp is all about consolidation. Please, don't make things any worse, let's just keep making what we already have still work. The MSDN Magazine Camp needs to keep churning out new gigantic pieces of technology that nobody can keep up with.
+
+Here's why this matters.
+
+Microsoft Lost the Backwards Compatibility Religion
+Inside Microsoft, the MSDN Magazine Camp has won the battle.
+
+The first big win was making Visual Basic.NET not backwards-compatible with VB 6.0. This was literally the first time in living memory that when you bought an upgrade to a Microsoft product, your old data (i.e. the code you had written in VB6) could not be imported perfectly and silently. It was the first time a Microsoft upgrade did not respect the work that users did using the previous version of a product.
+
+And the sky didn't seem to fall, not inside Microsoft. VB6 developers were up in arms, but they were disappearing anyway, because most of them were corporate developers who were migrating to web development anyway. The real long term damage was hidden.
+
+With this major victory under their belts, the MSDN Magazine Camp took over. Suddenly it was OK to change things. IIS 6.0 came out with a different threading model that broke some old applications. I was shocked to discover that our customers with Windows Server 2003 were having trouble running FogBugz. Then .NET 1.1 was not perfectly backwards compatible with 1.0. And now that the cat was out of the bag, the OS team got into the spirit and decided that instead of adding features to the Windows API, they were going to completely replace it. Instead of Win32, we are told, we should now start getting ready for WinFX: the next generation Windows API. All different. Based on .NET with managed code. XAML. Avalon. Yes, vastly superior to Win32, I admit it. But not an upgrade: a break with the past.
+
+Outside developers, who were never particularly happy with the complexity of Windows development, have defected from the Microsoft platform en-masse and are now developing for the web. Paul Graham, who created Yahoo! Stores in the early days of the dotcom boom, summarized it eloquently: "There is all the more reason for startups to write Web-based software now, because writing desktop software has become a lot less fun. If you want to write desktop software now you do it on Microsoft's terms, calling their APIs and working around their buggy OS. And if you manage to write something that takes off, you may find that you were merely doing market research for Microsoft."
+
+Microsoft got big enough, with too many developers, and they were too addicted to upgrade revenues, so they suddenly decided that reinventing everything was not too big a project. Heck, we can do it twice. The old Microsoft, the Microsoft of Raymond Chen, might have implemented things like Avalon, the new graphics system, as a series of DLLs that can run on any version of Windows and which could be bundled with applications that need them. There's no technical reason not to do this. But Microsoft needs to give you a reason to buy Longhorn, and what they're trying to pull off is a sea change, similar to the sea change that occurred when Windows replaced DOS. The trouble is that Longhorn is not a very big advance over Windows XP; not nearly as big as Windows was over DOS. It probably won't be compelling enough to get people to buy all new computers and applications like they did for Windows. Well, maybe it will, Microsoft certainly needs it to be, but what I've seen so far is not very convincing. A lot of the bets Microsoft made are the wrong ones. For example, WinFS, advertised as a way to make searching work by making the file system be a relational database, ignores the fact that the real way to make searching work is by making searching work. Don't make me type metadata for all my files that I can search using a query language. Just do me a favor and search the damned hard drive, quickly, for the string I typed, using full-text indexes and other technologies that were boring in 1973.
+
+Automatic Transmissions Win the Day
+Don't get me wrong... I think .NET is a great development environment and Avalon with XAML is a tremendous advance over the old way of writing GUI apps for Windows. The biggest advantage of .NET is the fact that it has automatic memory management.
+
+A lot of us thought in the 1990s that the big battle would be between procedural and object oriented programming, and we thought that object oriented programming would provide a big boost in programmer productivity. I thought that, too. Some people still think that. It turns out we were wrong. Object oriented programming is handy dandy, but it's not really the productivity booster that was promised. The real significant productivity advance we've had in programming has been from languages which manage memory for you automatically. It can be with reference counting or garbage collection; it can be Java, Lisp, Visual Basic (even 1.0), Smalltalk, or any of a number of scripting languages. If your programming language allows you to grab a chunk of memory without thinking about how it's going to be released when you're done with it, you're using a managed-memory language, and you are going to be much more efficient than someone using a language in which you have to explicitly manage memory. Whenever you hear someone bragging about how productive their language is, they're probably getting most of that productivity from the automated memory management, even if they misattribute it.
+
+Sidebar
+Why does automatic memory management make you so much more productive? 1) Because you can write f(g(x)) without worrying about how to free the return value from g, which means you can use functions which return interesting complex data types and functions which transform interesting complex data types, in turn allowing you to work at a higher level of abstraction. 2) Because you don't have to spend any time writing code to free memory or tracking down memory leaks. 3) Because you don't have to carefully coordinate the exit points from your functions to make sure things are cleaned up properly.
+Racing car aficionados will probably send me hate mail for this, but my experience has been that there is only one case, in normal driving, where a good automatic transmission is inferior to a manual transmission. Similarly in software development: in almost every case, automatic memory management is superior to manual memory management and results in far greater programmer productivity.
+
+If you were developing desktop applications in the early years of Windows, Microsoft offered you two ways to do it: writing C code which calls the Windows API directly and managing your own memory, or using Visual Basic and getting your memory managed for you. These are the two development environments I have used the most, personally, over the last 13 years or so, and I know them inside-out, and my experience has been that Visual Basic is significantly more productive. Often I've written the same code, once in C++ calling the Windows API and once in Visual Basic, and C++ always took three or four times as much work. Why? Memory management. The easiest way to see why is to look at the documentation for any Windows API function that needs to return a string. Look closely at how much discussion there is around the concept of who allocates the memory for the string, and how you negotiate how much memory will be needed. Typically, you have to call the function twice—on the first call, you tell it that you've allocated zero bytes, and it fails with a "not enough memory allocated" message and conveniently also tells you how much memory you need to allocate. That's if you're lucky enough not to be calling a function which returns a list of strings or a whole variable-length structure. In any case, simple operations like opening a file, writing a string, and closing it using the raw Windows API can take a page of code. In Visual Basic similar operations can take three lines.
+
+So, you've got these two programming worlds. Everyone has pretty much decided that the world of managed code is far superior to the world of unmanaged code. Visual Basic was (and probably remains) the number one bestselling language product of all time and developers preferred it over C or C++ for Windows development, although the fact that "Basic" was in the name of the product made hardcore programmers shun it even though it was a fairly modern language with a handful of object-oriented features and very little leftover gunk (line numbers and the LET statement having gone the way of the hula hoop). The other problem with VB was that deployment required shipping a VB runtime, which was a big deal for shareware distributed over modems, and, worse, let other programmers see that your application was developed in (the shame!) Visual Basic.
+
+One Runtime To Rule Them All
+And along came .NET. This was a grand project, the super-duper unifying project to clean up the whole mess once and for all. It would have memory management, of course. It would still have Visual Basic, but it would gain a new language, one which is in spirit virtually the same as Visual Basic but with the C-like syntax of curly braces and semicolons. And best of all, the new Visual Basic/C hybrid would be called Visual C#, so you would not have to tell anyone you were a "Basic" programmer any more. All those horrid Windows functions with their tails and hooks and backwards-compatibility bugs and impossible-to-figure-out string-returning semantics would be wiped out, replaced by a single clean object oriented interface that only has one kind of string. One runtime to rule them all. It was beautiful. And they pulled it off, technically. .NET is a great programming environment that manages your memory and has a rich, complete, and consistent interface to the operating system and a rich, super complete, and elegant object library for basic operations.
+
+And yet, people aren't really using .NET much.
+
+Oh sure, some of them are.
+
+But the idea of unifying the mess of Visual Basic and Windows API programming by creating a completely new, ground-up programming environment with not one, not two, but three languages (or are there four?) is sort of like the idea of getting two quarreling kids to stop arguing by shouting "shut up!" louder than either of them. It only works on TV. In real life when you shout "shut up!" to two people arguing loudly you just create a louder three-way argument.
+
+(By the way, for those of you who follow the arcane but politically-charged world of blog syndication feed formats, you can see the same thing happening over there. RSS became fragmented with several different versions, inaccurate specs and lots of political fighting, and the attempt to clean everything up by creating yet another format called Atom has resulted in several different versions of RSS plus one version of Atom, inaccurate specs and lots of political fighting. When you try to unify two opposing forces by creating a third alternative, you just end up with three opposing forces. You haven't unified anything and you haven't really fixed anything.)
+
+So now instead of .NET unifying and simplifying, we have a big 6-way mess, with everybody trying to figure out which development strategy to use and whether they can afford to port their existing applications to .NET.
+
+No matter how consistent Microsoft is in their marketing message ("just use .NET—trust us!"), most of their customers are still using C, C++, Visual Basic 6.0, and classic ASP, not to mention all the other development tools from other companies. And the ones that are using .NET are using ASP.NET to develop web applications, which run on a Windows server but don't require Windows clients, which is a key point I'll talk about more when I talk about the web.
+
+Oh, Wait, There's More Coming!
+Now Microsoft has so many developers cranking away that it's not enough to reinvent the entire Windows API: they have to reinvent it twice. At last year's PDC they preannounced the next major version of their operating system, codenamed Longhorn, which will contain, among other things, a completely new user interface API, codenamed Avalon, rebuilt from the ground up to take advantage of modern computers' fast display adapters and realtime 3D rendering. And if you're developing a Windows GUI app today using Microsoft's "official" latest-and-greatest Windows programming environment, WinForms, you're going to have to start over again in two years to support Longhorn and Avalon. Which explains why WinForms is completely stillborn. Hope you haven't invested too much in it. Jon Udell found a slide from Microsoft labelled "How Do I Pick Between Windows Forms and Avalon?" and asks, "Why do I have to pick between Windows Forms and Avalon?" A good question, and one to which he finds no great answer.
+
+So you've got the Windows API, you've got VB, and now you've got .NET, in several language flavors, and don't get too attached to any of that, because we're making Avalon, you see, which will only run on the newest Microsoft operating system, which nobody will have for a loooong time. And personally I still haven't had time to learn .NET very deeply, and we haven't ported Fog Creek's two applications from classic ASP and Visual Basic 6.0 to .NET because there's no return on investment for us. None. It's just Fire and Motion as far as I'm concerned: Microsoft would love for me to stop adding new features to our bug tracking software and content management software and instead waste a few months porting it to another programming environment, something which will not benefit a single customer and therefore will not gain us one additional sale, and therefore which is a complete waste of several months, which is great for Microsoft, because they have content management software and bug tracking software, too, so they'd like nothing better than for me to waste time spinning cycles catching up with the flavor du jour, and then waste another year or two doing an Avalon version, too, while they add features to their own competitive software. Riiiight.
+
+No developer with a day job has time to keep up with all the new development tools coming out of Redmond, if only because there are too many dang employees at Microsoft making development tools!
+
+It's Not 1990
+Microsoft grew up during the 1980s and 1990s, when the growth in personal computers was so dramatic that every year there were more new computers sold than the entire installed base. That meant that if you made a product that only worked on new computers, within a year or two it could take over the world even if nobody switched to your product. That was one of the reasons Word and Excel displaced WordPerfect and Lotus so thoroughly: Microsoft just waited for the next big wave of hardware upgrades and sold Windows, Word and Excel to corporations buying their next round of desktop computers (in some cases their first round). So in many ways Microsoft never needed to learn how to get an installed base to switch from product N to product N+1. When people get new computers, they're happy to get all the latest Microsoft stuff on the new computer, but they're far less likely to upgrade. This didn't matter when the PC industry was growing like wildfire, but now that the world is saturated with PCs most of which are Just Fine, Thank You, Microsoft is suddenly realizing that it takes much longer for the latest thing to get out there. When they tried to "End Of Life" Windows 98, it turned out there were still so many people using it they had to promise to support that old creaking grandma for a few more years.
+
+Unfortunately, these Brave New Strategies, things like .NET and Longhorn and Avalon, trying to create a new API to lock people into, can't work very well if everybody is still using their good-enough computers from 1998. Even if Longhorn ships when it's supposed to, in 2006, which I don't believe for a minute, it will take a couple of years before enough people have it that it's even worth considering as a development platform. Developers, developers, developers, and developers are not buying into Microsoft's multiple-personality-disordered suggestions for how we should develop software.
+
+Enter the Web
+I'm not sure how I managed to get this far without mentioning the Web. Every developer has a choice to make when they plan a new software application: they can build it for the web or they can build a "rich client" application that runs on PCs. The basic pros and cons are simple: Web applications are easier to deploy, while rich clients offer faster response time enabling much more interesting user interfaces.
+
+Web Applications are easier to deploy because there's no installation involved. Installing a web application means typing a URL in the address bar. Today I installed Google's new email application by typing Alt+D, gmail, Ctrl+Enter. There are far fewer compatibility problems and problems coexisting with other software. Every user of your product is using the same version so you never have to support a mix of old versions. You can use any programming environment you want because you only have to get it up and running on your own server. Your application is automatically available at virtually every reasonable computer on the planet. Your customers' data, too, is automatically available at virtually every reasonable computer on the planet.
+
+But there's a price to pay in the smoothness of the user interface. Here are a few examples of things you can't really do well in a web application:
+
+Create a fast drawing program
+Build a real-time spell checker with wavy red underlines
+Warn users that they are going to lose their work if they hit the close box of the browser
+Update a small part of the display based on a change that the user makes without a full roundtrip to the server
+Create a fast keyboard-driven interface that doesn't require the mouse
+Let people continue working when they are not connected to the Internet
+These are not all big issues. Some of them will be solved very soon by witty Javascript developers. Two new web applications, Gmail and Oddpost, both email apps, do a really decent job of working around or completely solving some of these issues. And users don't seem to care about the little UI glitches and slowness of web interfaces. Almost all the normal people I know are perfectly happy with web-based email, for some reason, no matter how much I try to convince them that the rich client is, uh, richer.
+
+So the Web user interface is about 80% there, and even without new web browsers we can probably get 95% there. This is Good Enough for most people and it's certainly good enough for developers, who have voted to develop almost every significant new application as a web application.
+
+Which means, suddenly, Microsoft's API doesn't matter so much. Web applications don't require Windows.
+
+It's not that Microsoft didn't notice this was happening. Of course they did, and when the implications became clear, they slammed on the brakes. Promising new technologies like HTAs and DHTML were stopped in their tracks. The Internet Explorer team seems to have disappeared; they have been completely missing in action for several years. There's no way Microsoft is going to allow DHTML to get any better than it already is: it's just too dangerous to their core business, the rich client. The big meme at Microsoft these days is: "Microsoft is betting the company on the rich client." You'll see that somewhere in every slide presentation about Longhorn. Joe Beda, from the Avalon team, says that "Avalon, and Longhorn in general, is Microsoft's stake in the ground, saying that we believe power on your desktop, locally sitting there doing cool stuff, is here to stay. We're investing on the desktop, we think it's a good place to be, and we hope we're going to start a wave of excitement..."
+
+The trouble is: it's too late.
+
+I'm a Little Bit Sad About This, Myself
+I'm actually a little bit sad about this, myself. To me the Web is great but Web-based applications with their sucky, high-latency, inconsistent user interfaces are a huge step backwards in daily usability. I love my rich client applications and would go nuts if I had to use web versions of the applications I use daily: Visual Studio, CityDesk, Outlook, Corel PhotoPaint, QuickBooks. But that's what developers are going to give us. Nobody (by which, again, I mean "fewer than 10,000,000 people") wants to develop for the Windows API any more. Venture Capitalists won't invest in Windows applications because they're so afraid of competition from Microsoft. And most users don't seem to care about crappy Web UIs as much as I do.
+
+And here's the clincher: I noticed (and confirmed this with a recruiter friend) that Windows API programmers here in New York City who know C++ and COM programming earn about $130,000 a year, while typical Web programmers using managed code languages (Java, PHP, Perl, even ASP.NET) earn about $80,000 a year. That's a huge difference, and when I talked to some friends from Microsoft Consulting Services about this they admitted that Microsoft had lost a whole generation of developers. The reason it takes $130,000 to hire someone with COM experience is because nobody bothered learning COM programming in the last eight years or so, so you have to find somebody really senior, usually they're already in management, and convince them to take a job as a grunt programmer, dealing with (God help me) marshalling and monikers and apartment threading and aggregates and tearoffs and a million other things that, basically, only Don Box ever understood, and even Don Box can't bear to look at them any more.
+
+Much as I hate to say it, a huge chunk of developers have long since moved to the web and refuse to move back. Most .NET developers are ASP.NET developers, developing for Microsoft's web server. ASP.NET is brilliant; I've been working with web development for ten years and it's really just a generation ahead of everything out there. But it's a server technology, so clients can use any kind of desktop they want. And it runs pretty well under Linux using Mono.
+
+None of this bodes well for Microsoft and the profits it enjoyed thanks to its API power. The new API is HTML, and the new winners in the application development marketplace will be the people who can make HTML sing.
+
+The Development Abstraction Layer
+by Joel Spolsky
+Tuesday, April 11, 2006
+A young man comes to town. He is reasonably good looking, has a little money in his pocket. He finds it easy to talk to women.
+
+He doesn't speak much about his past, but it is clear that he spent a lot of time in a soulless big company.
+
+He is naturally friendly and outgoing, and quietly confident without being arrogant. So he finds it easy to pick up small gigs from the job board at the local Programmer's Cafe. But he rapidly loses interest in insurance database projects, vanity web pages for housewives, and financial calculation engines.
+
+After a year, he calculates that he has saved up enough money to pay his modest expenses for a year. So, after consulting with his faithful Alsatian, he sets up a computer in a sunfilled room in his rented apartment above the grocery store and installs a carefully-chosen selection of tools.
+
+One by one, he calls his friends and warns them that if he seems remote over the next months, it is only because he is hard at work.
+
+And he sits down to spin code.
+
+And what code it is. Flawless, artistic, elegant, bug free. The user interface so perfectly mimics a users' thought process that the people he shows it to at the Programmer's Cafe hardly notice that there is a user interface. It's a brilliant piece of work.
+
+Encouraged by the feedback of his peers, he sets up in business and prepares to take orders.
+
+His modesty precludes any pretensions, but after a month, the situation in his bank account is not looking encouraging. So far only three orders have been taken: one from his mother, one from an anonymous benefactor at the Programmer's Cafe, and the one he submitted himself to test the commerce system.
+
+In the second month, no more orders come in.
+
+This surprises him and leaves him feeling melancholy. At the big company, new products were created on a regular basis, and even if they were inelegant and homely, they still sold in reasonable quantities. One product he worked on there went on to be a big hit.
+
+After a few more months pass, his financial situation starts to look a little bit precarious. His dog looks at him sadly, not quite certain what is wrong, but aware that his face is looking a little bit gaunter than usual, and he seems to be unable to get up the energy to go out with friends, or go shopping to restock the dangerously low larder, or even to bathe.
+
+One Tuesday morning, the local grocer has refused to extend him any more credit, and his banker has long since refused to return his calls.
+
+The big company is not vindictive. They recognize talent, and are happy to hire him back, at a higher salary. Soon he is looking better, he has some new clothes, and he's got his old confidence back. But something, somewhere, is missing. A spark in his eye. The hope that he might become the master of his own destiny is gone.
+
+
+
+Why did he fail? He's pretty sure he knows. "Marketing," he says. Like many young technicians, he is apt to say things like, "Microsoft has worse products but better marketing."
+
+When uttered by a software developer, the term "marketing" simply stands in for all that business stuff: everything they don't actually understand about creating software and selling it.
+
+This, actually, is not really what "marketing" means. Actually Microsoft has pretty terrible marketing. Can you imagine those dinosaur ads actually making someone want to buy Microsoft Office?
+
+Software is a conversation, between the software developer and the user. But for that conversation to happen requires a lot of work beyond the software development. It takes marketing, yes, but also sales, and public relations, and an office, and a network, and infrastructure, and air conditioning in the office, and customer service, and accounting, and a bunch of other support tasks.
+
+But what do software developers do? They design and write code, they layout screens, they debug, they integrate, and they check things into the source code control repository.
+
+The level a programmer works at (say, Emacs) is too abstract to support a business. Developers working at the developer abstraction layer need an implementation layer -- an organization that takes their code and turns it into products. Dolly Parton, working at the "singing a nice song" layer, needs a huge implementation layer too, to make the records and book the concert halls and take the tickets and set up the audio gear and promote the records and collect the royalties.
+
+Any successful software company is going to consist of a thin layer of developers, creating software, spread across the top of a big abstract administrative organization.
+
+The abstraction exists solely to create the illusion that the daily activities of a programmer (design and writing code, checking in code, debugging, etc.) are all that it takes to create software products and bring them to market. Which gets me to the most important point of this essay:
+
+Your first priority as the manager of a software team is building the development abstraction layer.
+
+Most new software managers miss this point. They keep thinking of the traditional, Command-and-Conquer model of management that they learned from Hollywood movies.
+
+According to Command-and-Conquer, managers-slash-leaders figure out where the business is going to go, and then issue the appropriate orders to their lieutenants to move the business in that direction. Their lieutenants in turn divide up the tasks into smaller chunks and command their reports to implement them. This continues down the org-chart until eventually someone at the bottom actually does some work. In this model, a programmer is a cog in the machine: a typist who carries out one part of management's orders.
+
+Some businesses actually run this way. You can always tell when you are dealing with such a business, because the person you are talking to is doing something infuriating and senseless, and they know it, and they might even care, but there's nothing they can do about it. It's the airline that loses a million mile customer forever because they refuse to change his non-refundable ticket so he can fly home for a family emergency. It's the ISP whose service is down more often than it's up, and when you cancel your account, they keep billing you, and billing you, and billing you, but when you call to complain, you have to call a toll number and wait on hold for an hour, and then they still refuse to refund you, until you start a blog about how badly they suck. It's the Detroit automaker that long since forgot how to design cars that people might want to buy and instead lurches from marketing strategy to marketing strategy, as if the only reason we don't buy their crappy cars is because the rebate wasn't big enough.
+
+Enough.
+
+Forget it. The command-hierarchy system of management has been tried, and it seemed to work for a while in the 1920s, competing against peddlers pushing carts, but it's not good enough for the 21st century. For software companies, you need to use a different model.
+
+With a software company, the first priority of management needs to be creating that abstraction for the programmers.
+
+If a programmer somewhere is worrying about a broken chair, or waiting on hold with Dell to order a new computer, the abstraction has sprung a leak.
+
+Think of your development abstraction layer as a big, beautiful yacht with insanely powerful motors. It's impeccably maintained. Gourmet meals are served like clockwork. The staterooms have twice-daily maid service. The navigation maps are always up to date. The GPS and the radar always work and if they break there's a spare below deck. Standing on the bridge, you have programmers who really only think about speed, direction, and whether to have Tuna or Salmon for lunch. Meanwhile a large team of professionals in starched white uniforms tiptoes around quietly below deck, keeping everything running, filling the gas tanks, scraping off barnacles, ironing the napkins for lunch. The support staff knows what to do but they take their cues from a salty old fart who nods ever so slightly in certain directions to coordinate the whole symphony so that the programmers can abstract away everything about the yacht except speed, direction, and what they want for lunch.
+
+Management, in a software company, is primarily responsible for creating abstractions for programmers. We build the yacht, we service the yacht, we are the yacht, but we don't steer the yacht. Everything we do comes down to providing a non-leaky abstraction for the programmers so that they can create great code and that code can get into the hands of customers who benefit from it.
+
+Programmers need a Subversion repository. Getting a Subversion repository means you need a network, and a server, which has to be bought, installed, backed up, and provisioned with uninterruptible power, and that server generates a lot of heat, which means it need to be in a room with an extra air conditioner, and that air conditioner needs access to the outside of the building, which means installing an 80 pound fan unit on the wall outside the building, which makes the building owners nervous, so they need to bring their engineer around, to negotiate where the air conditioner unit will go (decision: on the outside wall, up here on the 18th floor, at the most inconvenient place possible), and the building gets their lawyers involved, because we're going to have to sign away our firstborn to be allowed to do this, and then the air conditioning installer guys show up with rigging gear that wouldn't be out of place in a Barbie play-set, which makes our construction foreman nervous, and he doesn't allow them to climb out of the 18th floor window in a Mattel harness made out of 1/2" pink plastic, I swear to God it could be Disco Barbie's belt, and somebody has to call the building agent again and see why the hell they suddenly realized, 12 weeks into a construction project, that another contract amendment is going to be needed for this goddamned air conditioner that they knew about before Christmas and they only just figured it out, and if your programmers even spend one minute thinking about this that's one minute too many.
+
+To the software developers on your team, this all needs to be abstracted away as typing svn commit on the command line.
+
+That's why you have management.
+
+It's for the kind of stuff that no company can avoid, but if you have your programmers worrying about it, well, management has failed, the same way as a 100 foot yacht has failed if the millionaire owner has to go down into the engine room and, um, build the engine.
+
+You've got your typical company started by ex-software salesmen, where everything is Sales Sales Sales and we all exist to drive more sales. These companies can be identified in the wild because they build version 1.0 of the software (somehow) and then completely lose interest in developing new software. Their development team is starved or nonexistent because it never occurred to anyone to build version 2.0... all that management knows how to do is drive more sales.
+
+On the other extreme you have typical software companies built by ex-programmers. These companies are harder to find because in most circumstances they keep quietly to themselves, polishing code in a garret somewhere, which nobody ever finds, and so they fade quietly into oblivion right after the Great Ruby Rewrite, their earth-changing refactoring-code code somehow unappreciated by The People.
+
+Both of these companies can easily be wiped out by a company that's driven by programmers and organized to put programmers in the driver's seat, but which have an excellent abstraction that does all the hard work to convert code into products below the decks.
+
+A programmer is most productive with a quiet private office, a great computer, unlimited beverages, an ambient temperature between 68 and 72 degrees (F), no glare on the screen, a chair that's so comfortable you don't feel it, an administrator that brings them their mail and orders manuals and books, a system administrator who makes the Internet as available as oxygen, a tester to find the bugs they just can't see, a graphic designer to make their screens beautiful, a team of marketing people to make the masses want their products, a team of sales people to make sure the masses can get these products, some patient tech support saints who help customers get the product working and help the programmers understand what problems are generating the tech support calls, and about a dozen other support and administrative functions which, in a typical company, add up to about 80% of the payroll. It is not a coincidence that the Roman army had a ratio of four servants for every soldier. This was not decadence. Modern armies probably run 7:1. (Here's something Pradeep Singh taught me today: if only 20% of your staff is programmers, and you can save 50% on salary by outsourcing programmers to India, well, how much of a competitive advantage are you really going to get out of that 10% savings?)
+
+Management's primary responsibility to create the illusion that a software company can be run by writing code, because that's what programmers do. And while it would be great to have programmers who are also great at sales, graphic design, system administration, and cooking, it's unrealistic. Like teaching a pig to sing, it wastes your time and it annoys the pig.
+
+Microsoft does such a good job at creating this abstraction that Microsoft alumni have a notoriously hard time starting companies. They simply can't believe how much went on below decks and they have no idea how to reproduce it.
+
+
+
+Nobody expects Dolly Parton to know how to plug in a microphone. There's an incredible infrastructure of managers, musicians, recording technicians, record companies, roadies, hairdressers, and publicists behind her who exist to create the abstraction that when she sings, that's all it takes for millions of people to hear her song. All the support staff and management that make Dolly Parton possible can do their jobs best by providing the most perfect abstraction: the most perfect illusion that Dolly sings for us. It is her song. When you're listening to her on your iPod, there's a huge infrastructure that makes that possible, but the very best thing that infrastructure can do is disappear completely. Provide a leakproof abstraction that Dolly Parton is singing, privately, to us.
+
+The Perils of JavaSchools
+by Joel Spolsky
+Thursday, December 29, 2005
+Lazy kids.
+
+Whatever happened to hard work?
+
+A sure sign of my descent into senility is bitchin' and moanin' about "kids these days," and how they won't or can't do anything hard any more.
+
+“You were lucky. We lived for three months in a brown paper bag in a septic tank. We had to get up at six in the morning, clean the bag, eat a crust of stale bread, go to work down the mill, fourteen hours a day, week-in week-out, and when we got home our Dad would thrash us to sleep with his belt.” — Monty Python's Flying Circus, Four Yorkshiremen
+When I was a kid, I learned to program on punched cards. If you made a mistake, you didn't have any of these modern features like a backspace key to correct it. You threw away the card and started over.
+
+When I started interviewing programmers in 1991, I would generally let them use any language they wanted to solve the coding problems I gave them. 99% of the time, they chose C.
+
+Nowadays, they tend to choose Java.
+
+Now, don't get me wrong: there's nothing wrong with Java as an implementation language.
+
+Wait a minute, I want to modify that statement. I'm not claiming, in this particular article, that there's anything wrong with Java as an implementation language. There are lots of things wrong with it but those will have to wait for a different article.
+
+Instead what I'd like to claim is that Java is not, generally, a hard enough programming language that it can be used to discriminate between great programmers and mediocre programmers. It may be a fine language to work in, but that's not today's topic. I would even go so far as to say that the fact that Java is not hard enough is a feature, not a bug, but it does have this one problem.
+
+If I may be so brash, it has been my humble experience that there are two things traditionally taught in universities as a part of a computer science curriculum which many people just never really fully comprehend: pointers and recursion.
+
+You used to start out in college with a course in data structures, with linked lists and hash tables and whatnot, with extensive use of pointers. Those courses were often used as weedout courses: they were so hard that anyone that couldn't handle the mental challenge of a CS degree would give up, which was a good thing, because if you thought pointers are hard, wait until you try to prove things about fixed point theory.
+
+All the kids who did great in high school writing pong games in BASIC for their Apple II would get to college, take CompSci 101, a data structures course, and when they hit the pointers business their brains would just totally explode, and the next thing you knew, they were majoring in Political Science because law school seemed like a better idea. I've seen all kinds of figures for drop-out rates in CS and they're usually between 40% and 70%. The universities tend to see this as a waste; I think it's just a necessary culling of the people who aren't going to be happy or successful in programming careers.
+
+The other hard course for many young CS students was the course where you learned functional programming, including recursive programming. MIT set the bar very high for these courses, creating a required course (6.001) and a textbook (Abelson & Sussman's Structure and Interpretation of Computer Programs) which were used at dozens or even hundreds of top CS schools as the de facto introduction to computer science. (You can, and should, watch an older version of the lectures online.)
+
+The difficulty of these courses is astonishing. In the first lecture you've learned pretty much all of Scheme, and you're already being introduced to a fixed-point function that takes another function as its input. When I struggled through such a course, CSE121 at Penn, I watched as many if not most of the students just didn't make it. The material was too hard. I wrote a long sob email to the professor saying It Just Wasn't Fair. Somebody at Penn must have listened to me (or one of the other complainers), because that course is now taught in Java.
+
+I wish they hadn't listened.
+
+Think you have what it takes? Test Yourself Here!
+Therein lies the debate. Years of whinging by lazy CS undergrads like me, combined with complaints from industry about how few CS majors are graduating from American universities, have taken a toll, and in the last decade a large number of otherwise perfectly good schools have gone 100% Java. It's hip, the recruiters who use "grep" to evaluate resumes seem to like it, and, best of all, there's nothing hard enough about Java to really weed out the programmers without the part of the brain that does pointers or recursion, so the drop-out rates are lower, and the computer science departments have more students, and bigger budgets, and all is well.
+
+The lucky kids of JavaSchools are never going to get weird segfaults trying to implement pointer-based hash tables. They're never going to go stark, raving mad trying to pack things into bits. They'll never have to get their head around how, in a purely functional program, the value of a variable never changes, and yet, it changes all the time! A paradox!
+
+They don't need that part of the brain to get a 4.0 in major.
+
+Am I just one of those old-fashioned curmudgeons, like the Four Yorkshiremen, bragging about how tough I was to survive all that hard stuff?
+
+Heck, in 1900, Latin and Greek were required subjects in college, not because they served any purpose, but because they were sort of considered an obvious requirement for educated people. In some sense my argument is no different that the argument made by the pro-Latin people (all four of them). "[Latin] trains your mind. Trains your memory. Unraveling a Latin sentence is an excellent exercise in thought, a real intellectual puzzle, and a good introduction to logical thinking," writes Scott Barker. But I can't find a single university that requires Latin any more. Are pointers and recursion the Latin and Greek of Computer Science?
+
+Now, I freely admit that programming with pointers is not needed in 90% of the code written today, and in fact, it's downright dangerous in production code. OK. That's fine. And functional programming is just not used much in practice. Agreed.
+
+But it's still important for some of the most exciting programming jobs. Without pointers, for example, you'd never be able to work on the Linux kernel. You can't understand a line of code in Linux, or, indeed, any operating system, without really understanding pointers.
+
+Without understanding functional programming, you can't invent MapReduce, the algorithm that makes Google so massively scalable. The terms Map and Reduce come from Lisp and functional programming. MapReduce is, in retrospect, obvious to anyone who remembers from their 6.001-equivalent programming class that purely functional programs have no side effects and are thus trivially parallelizable. The very fact that Google invented MapReduce, and Microsoft didn't, says something about why Microsoft is still playing catch up trying to get basic search features to work, while Google has moved on to the next problem: building Skynet^H^H^H^H^H^H the world's largest massively parallel supercomputer. I don't think Microsoft completely understands just how far behind they are on that wave.
+
+But beyond the prima-facie importance of pointers and recursion, their real value is that building big systems requires the kind of mental flexibility you get from learning about them, and the mental aptitude you need to avoid being weeded out of the courses in which they are taught. Pointers and recursion require a certain ability to reason, to think in abstractions, and, most importantly, to view a problem at several levels of abstraction simultaneously. And thus, the ability to understand pointers and recursion is directly correlated with the ability to be a great programmer.
+
+Nothing about an all-Java CS degree really weeds out the students who lack the mental agility to deal with these concepts. As an employer, I've seen that the 100% Java schools have started churning out quite a few CS graduates who are simply not smart enough to work as programmers on anything more sophisticated than Yet Another Java Accounting Application, although they did manage to squeak through the newly-dumbed-down coursework. These students would never survive 6.001 at MIT, or CS 323 at Yale, and frankly, that is one reason why, as an employer, a CS degree from MIT or Yale carries more weight than a CS degree from Duke, which recently went All-Java, or U. Penn, which replaced Scheme and ML with Java in trying to teach the class that nearly killed me and my friends, CSE121. Not that I don't want to hire smart kids from Duke and Penn -- I do -- it's just a lot harder for me to figure out who they are. I used to be able to tell the smart kids because they could rip through a recursive algorithm in seconds, or implement linked-list manipulation functions using pointers as fast as they could write on the whiteboard. But with a JavaSchool Grad, I can't tell if they're struggling with these problems because they are undereducated or if they're struggling with these problems because they don't actually have that special part of the brain that they're going to need to do great programming work. Paul Graham calls them Blub Programmers.
+It's bad enough that JavaSchools fail to weed out the kids who are never going to be great programmers, which the schools could justifiably say is not their problem. Industry, or, at least, the recruiters-who-use-grep, are surely clamoring for Java to be taught.
+But JavaSchools also fail to train the brains of kids to be adept, agile, and flexible enough to do good software design (and I don't mean OO "design", where you spend countless hours rewriting your code to rejiggle your object hierarchy, or you fret about faux "problems" like has-a vs. is-a). You need training to think of things at multiple levels of abstraction simultaneously, and that kind of thinking is exactly what you need to design great software architecture.
+You may be wondering if teaching object oriented programming (OOP) is a good weed-out substitute for pointers and recursion. The quick answer: no. Without debating OOP on the merits, it is just not hard enough to weed out mediocre programmers. OOP in school consists mostly of memorizing a bunch of vocabulary terms like "encapsulation" and "inheritance" and taking multiple-choice quizzicles on the difference between polymorphism and overloading. Not much harder than memorizing famous dates and names in a history class, OOP poses inadequate mental challenges to scare away first-year students. When you struggle with an OOP problem, your program still works, it's just sort of hard to maintain. Allegedly. But when you struggle with pointers, your program produces the line Segmentation Fault and you have no idea what's going on, until you stop and take a deep breath and really try to force your mind to work at two different levels of abstraction simultaneously.
+The recruiters-who-use-grep, by the way, are ridiculed here, and for good reason. I have never met anyone who can do Scheme, Haskell, and C pointers who can't pick up Java in two days, and create better Java code than people with five years of experience in Java, but try explaining that to the average HR drone.
+But what about the CS mission of CS departments? They're not vocational schools! It shouldn't be their job to train people to work in industry. That's for community colleges and government retraining programs for displaced workers, they will tell you. They're supposed to be giving students the fundamental tools to live their lives, not preparing them for their first weeks on the job. Right?
+Card Punch -- yes, I learned Fortran on one of these when I was 12.Still. CS is proofs (recursion), algorithms (recursion), languages (lambda calculus), operating systems (pointers), compilers (lambda calculus) -- and so the bottom line is that a JavaSchool that won't teach C and won't teach Scheme is not really teaching computer science, either. As useless as the concept of function currying may be to the real world, it's obviously a prereq for CS grad school. I can't understand why the professors on the curriculum committees at CS schools have allowed their programs to be dumbed down to the point where not only can't they produce working programmers, they can't even produce CS grad students who might get PhDs and compete for their jobs. Oh wait. Never mind. Maybe I do understand.
+Actually if you go back and research the discussion that took place in academia during the Great Java Shift, you'll notice that the biggest concern was whether Java was simple enough to use as a teaching language.
+My God, I thought, they're trying to dumb down the curriculum even further! Why not spoon feed everything to the students? Let's have the TAs take their tests for them, too, then nobody will switch to American Studies. How is anyone supposed to learn anything if the curriculum has been carefully designed to make everything easier than it already is? There seems to be a task force underway (PDF) to figure out a simple subset of Java that can be taught to students, producing simplified documentation that carefully hides all that EJB/J2EE crap from their tender minds, so they don't have to worry their little heads with any classes that you don't need to do the ever-easier CS problem sets.
+The most sympathetic interpretation of why CS departments are so enthusiastic to dumb down their classes is that it leaves them more time to teach actual CS concepts, if they don't need to spend two whole lectures unconfusing students about the difference between, say, a Java int and an Integer. Well, if that's the case, 6.001 has the perfect answer for you: Scheme, a teaching language so simple that the entire language can be taught to bright students in about ten minutes; then you can spend the rest of the semester on fixed points.
+Feh.
+I'm going back to ones and zeros.
+(You had ones? Lucky bastard! All we got were zeros.)

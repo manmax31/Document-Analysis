@@ -1,0 +1,27 @@
+part-of-speech tags, 23 syntactic tags and 26 functional tags in the Chinese tree-bank tag set. The POS tags belong to terminal symbols, while others belong to non-terminal symbols.
+In the final rule base there are about 2000 rules and 400 rules learned from corpus for full parsing and base noun phrases identification respectively. The rules have the following format showed in table 1.
+num	rule	probability	frequency 126
+1	VCD VV	0.754491	
+2	+VV VCP	0.545455	6
+3	VV+VC VCP	0.454545	5
+	VV+VV		
+Table 1: the format of grammar rules In order to denote each rule explicitly, the mark ‘+’ is used as the junction mark. In above examples, symbols VP, VCD and VCP are verb phrase and verb compounds. Symbols VV and VC stand for common verbs and copula “ ” respectively.
+2.2 A New Grammar (PCFG*)
+Context-free grammars (CFGs) are widely used to describe the grammar structures in natural language	processing.	And probabilistic
+context-free grammars (PCFGs) directly add the probabilities to the rules. But it is sometimes not sufficient to only associate probability with each rule. So we define a new grammar system-PCFG*: each rule is assigned probability distribution	and	frequency	distribution
+simultaneously. The probability number is the relative value since it is the percentage value in the rule group that have the same left sides. While the frequency number is the absolute value because it is the total numbers occurred in whole corpus. The probability property is the key value to full parsing. The probability attribute is superior to frequency attribute.
+A sample is presented to show how to use probability and frequency of a rule.
+Suppose there are three rules showed in table 2 and the relations is displayed in figure 1.
+Rule	F(r) 	P(r) p1=f1/(f1+f2) p2=f2/(f1+f2) p3 =1>p1
+X A+C	f1	
+X A+B+C	f2 >f1 f3 <f1	
+Y DOC		
+Table 2: the examples of rule Figure 1: structure of rules
+Suppose the input symbols contain A, B and C. When rule 1 and rule 3 simultaneously satisfy the reduce condition, rule 3 is executed and the left side item ‘Y’ is pushed to the stack because p3 is bigger than p 1. To complete parsing, probability always has the priority to frequency. But to baseNP parsing, frequency is superior to probability attribution. Since f1>f3, rule 1 is executed first. If f1 is equal to f3, then go on to compare probability.
+3. Parsing Algorithm
+The parsing algorithm is very significant as well as the grammar rules to the parsing system. We produce an extended GLR parsing algorithm based on the Tomita’s GLR parsing algorithm in our system.
+3.1 the Extended GLR Parsing Algorithm
+The GLR method augments the LR parser and overcomes the drawback of the LR parser. In fact, from the point of parsing algorithm, there are no clear differences between LR and GLR algorithm. In parsing processing, there are also four actions in GLR algorithm that are similar to the LR parsing. But GLR parsing algorithm admits multiple entries in the parsing table. Our extended GLR algorithm also permits that several shift and reduce actions exist in one branch in the parsing table simultaneously. So there are mainly two types of conflicts: shift-reduce conflict and reduce-reduce conflict. These conflicts are the most difficult problems of GLR algorithm. In the parsing process, when the conflicts between shift and reduce occur, the principle of our parsing method is that the reduce action is superior to the shift action.
+If only grammar rules are used to describe the context relations, they may produce many conflicts when several rules satisfy the conditions. So we use the grammar system--PCFG* to add statistical information. The probabilities distributions are associated
+C
+

@@ -1,0 +1,21 @@
+package ml.classifier;
+
+public class fileVector {
+    public int num_of_top;
+    public double[] tfidf;
+    public int[] tf;
+    public int fileindex;
+    public String markedclass;
+    public String filename;
+    public fileVector(int numoftop){
+    	num_of_top = numoftop;
+    	tfidf = new double[num_of_top];
+    	tf = new int[num_of_top];
+    	fileindex = -1;
+    	for(int i = 0; i<num_of_top;i++){
+    		tfidf[i]=0.0;
+    		tf[i] = 0;
+    	}
+    	markedclass = new String();
+    }
+}

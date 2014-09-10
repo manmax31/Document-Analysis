@@ -1,0 +1,24 @@
+1410175675249	Rename compilation unit 'KMeans.java'
+1410175775965	Delete element
+1410175783346	Delete element
+1410175788120	Delete element
+1410180304259	Delete element
+1410180450306	Delete element
+1410185227933	Rename local variable 'sent'
+1410185432436	Rename local variable 'sent'
+1410187993465	Rename type 'UnigramBuilder'
+1410191531038	Delete element
+1410191565541	Delete element
+1410191605344	Delete element
+1410196457710	Delete element
+1410229453144	Rename field 'collectionFreq'
+1410232162740	Rename local variable 'd2h'
+1410232686760	Delete element
+1410233066081	Rename type 'File2Dictionary'
+1410233083438	Rename type 'Files2Dictionary'
+1410245291665	Delete element
+1410263523351	Rename local variable 'randomKeys'
+1410272278355	Rename local variable 'bigDictionary'
+1410272293478	Rename local variable 'allTermsDictionary'
+1410284196706	Rename method 'computeSimilarity'
+1410329082902	Infer generic type arguments

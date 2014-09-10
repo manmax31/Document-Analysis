@@ -1,0 +1,87 @@
+package KMeans;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import util.FileFinder;
+
+public class Doc2HashMap 
+{	
+	public Doc2HashMap(String directory, boolean ignore_stop_words)
+	{
+		HashMap<String, Term> doc2Map =  new HashMap<String, Term>();
+		ArrayList<File> files = FileFinder.GetAllFiles(directory, "", true);
+		System.out.println("Found " + files.size() + " files.");
+		
+		int file_count = 0;
+		
+		for (File file : files) 
+		{
+			String       file_content  = DocUtils.ReadFile(file);
+			List<String> tokensList    = DocUtils.getTokensList(file_content, ignore_stop_words);
+			Set<String>  tokensSet     = DocUtils.getTokensSet(tokensList);
+			
+			// Revise Collection Freq
+			for (String token : tokensList) 
+			{
+				if(!doc2Map.containsKey(token))
+				{
+					doc2Map.put(token, new Term(token));
+				}
+				doc2Map.get(token).collectionFreq++;
+			}
+			
+			// Revise Doc Freq
+			for (String token : tokensSet) 
+			{
+				if(!doc2Map.containsKey(token))
+				{
+					doc2Map.put(token, new Term(token));
+				}
+				doc2Map.get(token).docFreq++;
+			}
+			
+			if (++file_count % 10 == 0)
+				System.out.println("Read " + file_count + " files.");
+			
+			for (String token : doc2Map.entrySet()) 
+			{
+				System.out.println(token);
+			}
+			
+		}
+	}
+		
+	public static void toStringByDocFreqDesc()
+	{
+		/*
+		Collection<Term> words =  doc2Map.values();
+		Term[] sortedWords     = words.toArray(new Term[0]);
+		Arrays.sort(sortedWords, new WordComparatorByDocFreqDesc());
+		
+		StringBuilder sb = new StringBuilder();
+		for (Term word : sortedWords)
+		{
+			sb.append("[document frequency: " + word.docFreq + ", collection frequency: " +word.collectionFreq +"] " + word.term +"\n");
+		}
+		return sb.toString();
+		*/
+	}
+		
+		
+		
+	
+
+	public static void main(String[] args) 
+	{
+		String directory = "data/blog_data/";
+		Doc2HashMap d2h  = new Doc2HashMap(directory, true); 
+
+	}
+
+}

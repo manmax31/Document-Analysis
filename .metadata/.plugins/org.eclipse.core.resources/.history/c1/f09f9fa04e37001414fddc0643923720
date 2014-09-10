@@ -1,0 +1,21 @@
+/**
+ * 
+ */
+package ml.classifier;
+
+/**
+ * @author manabchetia
+ *
+ */
+public class KMeans 
+{
+
+	/**
+	 * Here execution begins
+	 */
+	public static void main(String[] args) 
+	{
+		UnigramBuilder UB = new UnigramBuilder("data/two_newsgroups/", 500, true);
+	}
+
+}

@@ -1,0 +1,24 @@
+/**
+ * 
+ */
+package ml.classifier;
+
+import text.UnigramBuilder;
+
+/**
+ * @author manabchetia
+ *
+ */
+public class KMeans 
+{
+
+	
+	public static void main(String[] args) 
+	{
+		final String DATA_SRC = "data/blog_data/";
+		
+		UnigramBuilder UB = new UnigramBuilder(DATA_SRC, 500, true);
+		System.out.println(UB.toString());
+	}
+
+}
