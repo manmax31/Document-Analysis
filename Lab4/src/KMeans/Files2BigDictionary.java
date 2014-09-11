@@ -26,7 +26,7 @@ public class Files2BigDictionary
 		allTermsMap =  new HashMap<String, Term>();
 		Map<String, Map> bigFileDictionary = new HashMap<String, Map>(); // {fileName1: {wordFreqMap}, ...}
 		
-		ArrayList<File> files = FileFinder.GetAllFiles(directory, "txt", true); // Get all .TXT files
+		ArrayList<File> files = FileFinder.GetAllFiles(directory, "", true); // Get all .TXT files
 		System.out.println("Found " + files.size() + " files.");
 		
 		int file_count = 0;
@@ -55,7 +55,7 @@ public class Files2BigDictionary
 				allTermsMap.get(token).docFreq++;
 			}
 			
-			if (++file_count % 40 == 0)
+			if (++file_count % 500 == 0)
 				System.out.println("Read " + file_count + " files.");
 		}
 		
