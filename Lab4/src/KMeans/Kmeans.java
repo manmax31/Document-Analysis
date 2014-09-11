@@ -199,8 +199,8 @@ public class Kmeans
 		{
 			List<Document> documents = cluster.getValue();
 			
-			Collections.sort(documents);
-			Collections.reverse(documents);
+			Collections.sort(documents, Collections.reverseOrder());
+			//Collections.reverse(documents);
 			
 			System.out.println("Cluster " + clusterNo);
 			clusterNo++;

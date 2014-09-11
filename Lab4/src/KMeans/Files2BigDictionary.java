@@ -60,6 +60,7 @@ public class Files2BigDictionary
 		}
 		
 		System.out.println("All files and words, frequencies are Hashed");
+		System.out.println("Corpus contains " + allTermsMap.size() + " unique words");
 		
 		return bigFileDictionary;
 	}
