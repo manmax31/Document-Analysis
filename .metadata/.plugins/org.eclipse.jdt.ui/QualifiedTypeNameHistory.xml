@@ -22,9 +22,9 @@
 <fullyQualifiedTypeName name="java.util.Random"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="KMeans.Document"/>
-<fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="com.google.common.collect.BiMap"/>
 <fullyQualifiedTypeName name="com.google.common.collect.HashBiMap"/>
 <fullyQualifiedTypeName name="com.google.common.collect.Lists"/>
 <fullyQualifiedTypeName name="java.util.Collections"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
 </qualifiedTypeNameHistroy>

@@ -22,3 +22,5 @@
 1410272293478	Rename local variable 'allTermsDictionary'
 1410284196706	Rename method 'computeSimilarity'
 1410329082902	Infer generic type arguments
+1410414846023	Rename local variable 'documentsOfCluster'
+1410414855887	Rename local variable 'noOfDocsinCluster'

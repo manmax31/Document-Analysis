@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.math.BigDecimal;
 
-public class Document 
+public class Document implements Comparable<Document>
 {
 	int k;
 	String docName;
@@ -72,6 +72,12 @@ public class Document
 			tfIdfMap.put(term, tfidf);
 		}
 		return tfIdfMap;	
+	}
+
+	@Override
+	public int compareTo(Document o) {
+		// TODO Auto-generated method stub
+		return Double.compare(this.distance, o.distance);
 	}
 
 }
