@@ -114,8 +114,8 @@ public class Kmeans
 		// Looping over all documents
 		for (Document document : documentVectorList)     
 		{
-			BiMap<Integer, Double> scoresMap = HashBiMap.create();  // Dictionary to store similarity scores for a document from each centroid
-			//Map<Integer, Double> scoresMap = new HashMap<Integer, Double>();
+			//BiMap<Integer, Double> scoresMap = HashBiMap.create();  // Dictionary to store similarity scores for a document from each centroid
+			Map<Integer, Double> scoresMap = new HashMap<Integer, Double>();
 			
 			
 			// Getting score for a document from each centroid and appending each score to scoresMap
@@ -126,22 +126,17 @@ public class Kmeans
 			}
 			
 			// Getting the cluster with highest score
-			
+			/*
 			List<Double> scores = Lists.newArrayList(scoresMap.values());
 			Collections.sort(scores, Collections.reverseOrder());          // Sorting in descending order
 			int k = scoresMap.inverse().get(scores.get(0));                // Getting Cluster ID
-			
-			/*
+			*/
 			Entry<Integer, Double> maxScore = null;
 			for (Entry<Integer, Double> score : scoresMap.entrySet()) 
 			{
 				if (maxScore == null || score.getValue() > maxScore.getValue()) 
 			        maxScore = score;
 			}
-			
-			//System.out.println(maxScore.getKey());
-			int k = maxScore.getKey();
-			*/
 			
 			// Setting document to a cluster
 			document.setClusterID(k);
@@ -226,11 +221,9 @@ public class Kmeans
 		centroids           = intialiseCentroids(K);               // Get initial Centroids
 		//centroids			= intialiseCentroids1(K, documentVectorList);
 		
-		//expectation();
-		
 		System.out.println("\nNo of Clusters: " + K);
 		System.out.println("Running K Means...");
-		runKmeans(10); // Run KMeans 50 times
+		runKmeans(5); // Run KMeans 50 times
 		System.out.println();
 		printDocuments(10); // Print top 5 documents of each cluster
 		

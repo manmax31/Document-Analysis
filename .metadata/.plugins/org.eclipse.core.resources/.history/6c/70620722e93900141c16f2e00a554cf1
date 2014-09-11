@@ -230,7 +230,7 @@ public class Kmeans
 		
 		System.out.println("\nNo of Clusters: " + K);
 		System.out.println("Running K Means...");
-		runKmeans(10); // Run KMeans 50 times
+		runKmeans(5); // Run KMeans 50 times
 		System.out.println();
 		printDocuments(10); // Print top 5 documents of each cluster
 		
