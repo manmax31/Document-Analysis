@@ -15,8 +15,10 @@ import com.google.common.collect.Lists;
 
 public class Kmeans 
 {
-	private static List<Document>    documentVectorList;
-	private static Map<Integer, Map> centroids;
+	private static List<Document>                documentVectorList;
+	private static Map<Integer, Map>             centroids;
+	private static Map<Integer, List<Document> > clusterMap;
+
 	
 	public static List<Document> docsToVectors( Map<String, Map>  bigFileDictionary )
 	{
@@ -45,7 +47,7 @@ public class Kmeans
 			Map<String, Double> randomTFIDFMap =   new HashMap<String, Double>();
 			for (String word : allWords) 
 			{
-				double randomTFIDFScore = (-1) + (1 - (-1)) * r.nextDouble(); //randomValue = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
+				double randomTFIDFScore = r.nextDouble(); //randomValue = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
 				randomTFIDFMap.put(word, randomTFIDFScore);
 			}
 			centroids.put(i, randomTFIDFMap);
@@ -90,8 +92,11 @@ public class Kmeans
 		return score;
 	}
 
-	public static void expectation( Map<Integer, Map> centroids, List<Document> documentVectorList )
+	//public static void expectation( Map<Integer, Map> centroids, List<Document> documentVectorList )
+	public static void expectation( )
 	{
+		clusterMap = new HashMap< Integer, List<Document> >();
+		
 		for (Document document : documentVectorList) 
 		{
 			BiMap<Integer, Double> scoresMap = HashBiMap.create();
@@ -112,31 +117,78 @@ public class Kmeans
 			document.setClusterID(k);
 			document.setDistance(scoresMap.get(k));
 			
+			// Getting all documents belonging to a cluster. E.g. {cluster0: [doc1, doc2], cluster1: [doc4, doc6], ...}
+			if (! clusterMap.containsKey(document.k) )
+			{
+				clusterMap.put( document.k, new ArrayList<Document>() );
+			}
+			clusterMap.get(document.k).add(document);
+			
+			
 			//System.out.println(k + " " + scoresMap + "  " + scoresMap.get(k));
 		}
 	}
 	
-	public static void maximisation( Map<Integer, Map> centroids, List<Document> documentVectorList, int K )
+	public static void maximisation()
 	{
-		Map< Integer, Map<String, Double> > clusterMap = new HashMap< Integer, Map<String, Double> >();
-		
-		for (Document document : documentVectorList) 
+		for ( Entry<Integer, Map> centroid : centroids.entrySet() )              // Looping over each centroid
 		{
-			//System.out.println(document.docName + "  " +  document.k);
-			if (! clusterMap.containsKey(document.k))
+			Map<String, Double>  tfIdfMapOfCentroid  = centroid.getValue();
+			List<Document>       documentsInCluster  = clusterMap.get( centroid.getKey() ); // [Doc1, Doc2, Doc3, ..]
+			int                  noOfDocsInCluster   = documentsInCluster.size();
+			
+			for ( Entry<String, Double> term : tfIdfMapOfCentroid.entrySet() )  // Looping over each TERM of a centroid's value
 			{
-				clusterMap.put(document.k, document.tfIdfMap);
-			}
-			else
-			{
+				String word = term.getKey();
 				
+				double score = 0.0;
+				for ( Document document: documentsInCluster )
+				{
+					if ( document.tfIdfMap.containsKey(word) )
+					{
+						score += document.tfIdfMap.get(word);
+					}
+				}
+				score /= noOfDocsInCluster;
+				tfIdfMapOfCentroid.put(word, score);
 			}
 		}
 	}
 	
+	private static void runKmeans(int maxIterations) 
+	{
+		for (int i = 0; i < maxIterations; i++) 
+		{
+			expectation();
+			maximisation();
+		}
+	}
+	
+	private static void printDocuments(int top) 
+	{
+		int clusterNo = 1;
+		for (Entry<Integer, List<Document>> cluster : clusterMap.entrySet()) 
+		{
+			List<Document> documents = cluster.getValue();
+			
+			Collections.sort(documents);
+			Collections.reverse(documents);
+			
+			System.out.println("Cluster " + clusterNo);
+			clusterNo++;
+			
+			for (int i = 0; i < top; i++) 
+			{
+				System.out.println(documents.get(i).docName);
+			}
+			System.out.println();
+		}
+	}
+	
+	
 	public static void main(String[] args) 
 	{
-		int K = 3;                           // Number of Clusters
+		int K = 2;                           // Number of Clusters
 		String directory          = args[0]; // Enter Directory name
 		boolean ignore_stop_words = true;
 		
@@ -145,9 +197,11 @@ public class Kmeans
 		documentVectorList  = docsToVectors ( bigFileDictionary ); // Convert all files to TfIdf Vectors
 		centroids           = intialiseCentroids(K);               // Get Initial centroids
 		
-		expectation (centroids, documentVectorList);
-		maximisation(centroids, documentVectorList, K );
-		
+		System.out.println("\nRunning K Means...");
+		runKmeans(1000); // Run KMeans 1000 times
+		System.out.println();
+		printDocuments(5); // Print top 5 documents of each cluster
+	
 		/*
 		// For 2 Documents as of now
 		Map<String, Double> tfMap_1    = Document.getTFMap    ( bigFileDictionary.get("file_36.txt") );
@@ -158,10 +212,5 @@ public class Kmeans
 		
 		System.out.print( getSimilarityScore( tfIdfMap_1, tfIdfMap_2)  ); */
 		
-		
-		
-		
-		
 	}
-
 }

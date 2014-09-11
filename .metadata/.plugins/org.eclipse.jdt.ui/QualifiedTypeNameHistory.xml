@@ -3,7 +3,6 @@
 <fullyQualifiedTypeName name="java.util.stream.Collector"/>
 <fullyQualifiedTypeName name="text.UnigramBuilder"/>
 <fullyQualifiedTypeName name="text.WordCount"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="util.DocUtils"/>
 <fullyQualifiedTypeName name="java.util.HashSet"/>
 <fullyQualifiedTypeName name="java.nio.file.Files"/>
@@ -27,4 +26,5 @@
 <fullyQualifiedTypeName name="com.google.common.collect.Lists"/>
 <fullyQualifiedTypeName name="java.util.Collections"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
 </qualifiedTypeNameHistroy>

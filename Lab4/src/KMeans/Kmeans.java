@@ -195,9 +195,8 @@ public class Kmeans
 		Map<String, Map>  bigFileDictionary   = Files2BigDictionary.filesToHashMap(directory, ignore_stop_words);
 		
 		documentVectorList  = docsToVectors ( bigFileDictionary ); // Convert all files to TfIdf Vectors
-		centroids           = intialiseCentroids(K);               // Get Initial centroids
+		centroids           = intialiseCentroids(K);               // Get initial Centroids
 		
-		//expectation (centroids, documentVectorList);
 		System.out.println("\nRunning K Means...");
 		runKmeans(1000); // Run KMeans 1000 times
 		System.out.println();
