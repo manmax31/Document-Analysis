@@ -155,37 +155,6 @@ public class Kmeans
 		}
 	}
 	
-	private static void runKmeans(int maxIterations) 
-	{
-		for (int i = 0; i < maxIterations; i++) 
-		{
-			expectation();
-			maximisation();
-		}
-	}
-	
-	private static void printDocuments(int top) 
-	{
-		int clusterNo = 1;
-		for (Entry<Integer, List<Document>> cluster : clusterMap.entrySet()) 
-		{
-			List<Document> documents = cluster.getValue();
-			
-			Collections.sort(documents);
-			Collections.reverse(documents);
-			
-			System.out.println("Cluster " + clusterNo);
-			clusterNo++;
-			
-			for (int i = 0; i < top; i++) 
-			{
-				System.out.println(documents.get(i).docName);
-			}
-			System.out.println();
-		}
-	}
-	
-	
 	public static void main(String[] args) 
 	{
 		int K = 2;                           // Number of Clusters
@@ -199,10 +168,36 @@ public class Kmeans
 		
 		//expectation (centroids, documentVectorList);
 		System.out.println("\nRunning K Means...");
-		runKmeans(1000); // Run KMeans 1000 times
+		for (int i = 0; i < 1000; i++) 
+		{
+			expectation();
+			maximisation();
+		}
+		
 		System.out.println();
-		printDocuments(5); // Print top 5 documents of each cluster
-	
+		
+		int clusterNo = 1;
+		for (Entry<Integer, List<Document>> cluster : clusterMap.entrySet()) 
+		{
+			List<Document> documents = cluster.getValue();
+			
+			Collections.sort(documents);
+			Collections.reverse(documents);
+			
+			System.out.println("Cluster " + clusterNo);
+			clusterNo++;
+			
+			for (int i = 0; i < 5; i++) 
+			{
+				System.out.println(documents.get(i).docName);
+			}
+			System.out.println();
+		}
+		
+		
+		
+		
+		
 		/*
 		// For 2 Documents as of now
 		Map<String, Double> tfMap_1    = Document.getTFMap    ( bigFileDictionary.get("file_36.txt") );
@@ -213,5 +208,10 @@ public class Kmeans
 		
 		System.out.print( getSimilarityScore( tfIdfMap_1, tfIdfMap_2)  ); */
 		
+		
+		
+		
+		
 	}
+
 }

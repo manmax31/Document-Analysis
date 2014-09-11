@@ -202,7 +202,11 @@ public class Kmeans
 		runKmeans(1000); // Run KMeans 1000 times
 		System.out.println();
 		printDocuments(5); // Print top 5 documents of each cluster
-	
+		
+		
+		
+		
+		
 		/*
 		// For 2 Documents as of now
 		Map<String, Double> tfMap_1    = Document.getTFMap    ( bigFileDictionary.get("file_36.txt") );
@@ -213,5 +217,11 @@ public class Kmeans
 		
 		System.out.print( getSimilarityScore( tfIdfMap_1, tfIdfMap_2)  ); */
 		
+		
+		
+		
+		
 	}
+
+
 }

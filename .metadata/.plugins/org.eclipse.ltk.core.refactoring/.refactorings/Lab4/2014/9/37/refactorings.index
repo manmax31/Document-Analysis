@@ -24,3 +24,5 @@
 1410329082902	Infer generic type arguments
 1410414846023	Rename local variable 'documentsOfCluster'
 1410414855887	Rename local variable 'noOfDocsinCluster'
+1410419360314	Extract method 'runKmeans'
+1410419467383	Extract method 'printDocuments'
