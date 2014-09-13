@@ -3,29 +3,35 @@ package nlp.nicta.filters;
 import org.tartarus.snowball.*;
 import org.tartarus.snowball.ext.*;
 
-public class SnowballStemmer {
+public class SnowballStemmer 
+{
 
     public int STEM_REPEAT_TIMES = 1; // How many times to repeat stemming
 
     public englishStemmer _stemmer;
     
-	public SnowballStemmer() {
+	public SnowballStemmer() 
+	{
 		_stemmer = new englishStemmer();
 	}
 	
-	public SnowballStemmer(int stem_repeat_times) {
+	public SnowballStemmer(int stem_repeat_times) 
+	{
 		STEM_REPEAT_TIMES = stem_repeat_times;
 	}
 
-    public String stem(String s) {
+    public String stem(String s) 
+    {
 	    _stemmer.setCurrent(s);
-	    for (int i = STEM_REPEAT_TIMES; i != 0; i--) {
+	    for (int i = STEM_REPEAT_TIMES; i != 0; i--) 
+	    {
 	    	_stemmer.stem();
 	    }
 	    return _stemmer.getCurrent();
     }
 
-	public static void main(String args[]) {
+	public static void main(String args[]) 
+	{
 		SnowballStemmer sbs = new SnowballStemmer();
 		Test(sbs, "is");
 		Test(sbs, "Scott");
@@ -39,7 +45,8 @@ public class SnowballStemmer {
 		Test(sbs, "buses");
 	}
 	
-	public static void Test(SnowballStemmer sbs, String s) {
+	public static void Test(SnowballStemmer sbs, String s)
+	{
 		System.out.println("'" + s + "' stem: '" + sbs.stem(s) + "'");
 	}
 

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import nlp.nicta.filters.SnowballStemmer;
 import nlp.nicta.filters.StopWordChecker;
 
 public class DocUtils 
@@ -43,14 +44,16 @@ public class DocUtils
 	public static List<String> getTokensList(String file_content, boolean ignore_stop_words)
 	{
 	
-		List<String>    tokensList = new ArrayList<String>(); 
-		StopWordChecker _swc       = new StopWordChecker();
+		List<String>     tokensList = new ArrayList<String>(); 
+		StopWordChecker  _swc       = new StopWordChecker();
+		SnowballStemmer  sbs        = new SnowballStemmer();
 		
 		String[]        tokens     = file_content.split(SPLIT_TOKENS);
 		
 		for (String token : tokens) 
 		{
 			token = token.trim().toLowerCase().replaceAll("�", "'"); 
+			token = sbs.stem(token); // Using Snow Ball Stemmer
 			if (token.length() == 0 || (ignore_stop_words  &&  _swc.isStopWord(token)))
 				continue;
 			tokensList.add(token);

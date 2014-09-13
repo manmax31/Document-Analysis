@@ -1,0 +1,5 @@
+1. Copy folder "KMeans" and paste it in "src/" directory.
+2. Copy "ivy.xml" and paste it in root of project.
+3. Install IVY from Eclipse market place.
+4. Configure IVY in Eclipse to use "ivy.xml".
+5. Run "Kmeans.java" by setting parameters number of clusters and path of the directory in variables "K" and "directory" in the MAIN function of "Kmeans.java" respectively.

@@ -127,22 +127,25 @@ public class Kmeans
 			
 			// Getting the cluster with highest score
 			
+			
+			// BiMap
 			List<Double> scores = Lists.newArrayList(scoresMap.values());
 			Collections.sort(scores, Collections.reverseOrder());          // Sorting in descending order
 			int k = scoresMap.inverse().get(scores.get(0));                // Getting Cluster ID
 			
+			
 			/*
+			// HashMap
 			Entry<Integer, Double> maxScore = null;
 			for (Entry<Integer, Double> score : scoresMap.entrySet()) 
 			{
 				if (maxScore == null || score.getValue() > maxScore.getValue()) 
 			        maxScore = score;
 			}
-			
 			//System.out.println(maxScore.getKey());
 			int k = maxScore.getKey();
+			//
 			*/
-			
 			// Setting document to a cluster
 			document.setClusterID(k);
 			document.setScore(scoresMap.get(k));
@@ -217,22 +220,25 @@ public class Kmeans
 	public static void main(String[] args) 
 	{
 		int K = 2;                                      // Number of Clusters
-		String directory          = "data/two_newsgroups/"; // Enter Directory name
+		String directory          = "data/two_newsgroups/";
+		//String directory          = "data/blog_data/"; // Enter Directory name
 		boolean ignore_stop_words = true;
 		
 		Map<String, Map>  bigFileDictionary  =  Files2BigDictionary.filesToHashMap(directory, ignore_stop_words);
 		
+		System.out.println("\nConverting Documents to TFIDF vectors ...");
 		documentVectorList                   =  docsToVectors ( bigFileDictionary ); // Convert all files to TfIdf Vectors
-		centroids           = intialiseCentroids(K);               // Get initial Centroids
-		//centroids			= intialiseCentroids1(K, documentVectorList);
+		System.out.println("Initialising Centroids ...");
+		centroids           = intialiseCentroids(K);               // Get initial Centroids from Union of Words
+		//centroids			= intialiseCentroids1(K, documentVectorList); // Get initial Centroid from the documents
 		
 		//expectation();
 		
 		System.out.println("\nNo of Clusters: " + K);
 		System.out.println("Running K Means...");
-		runKmeans(10); // Run KMeans 50 times
+		runKmeans(15); // Run KMeans 50 times
 		System.out.println();
-		printDocuments(10); // Print top 5 documents of each cluster
+		printDocuments(5); // Print top 5 documents of each cluster
 		
 	}
 }
