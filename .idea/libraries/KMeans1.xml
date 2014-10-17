@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="KMeans1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Lab4/src/KMeans.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

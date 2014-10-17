@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="Extras">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hsqldb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jaws-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jwnl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jwpl_v05b.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/lingpipe-3.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/lucene-core-2.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/maxent-2.5.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/nekohtml-1.9.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/opencsv-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/opennlp-0.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openNLPtools.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/snowball_stemmer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/stanford-parser-2008-10-26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/trove.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/twitter4j-async-2.2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/twitter4j-core-2.2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/twitter4j-media-support-2.2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/twitter4j-stream-2.2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xercesImpl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xml-apis.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/jwpl_v05b.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/opennlp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/snowball_stemmer.jar!/" />
+    </SOURCES>
+  </library>
+</component>
