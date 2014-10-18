@@ -386,7 +386,7 @@ public class NER
 		}
 		
 		// Hash word and frequency of word
-		// Organisation
+		// Hashing Organisation
 		Map<String, Integer> orgMap = new HashMap<String, Integer>();
 		 
 		for (String temp : orgList) 
@@ -395,7 +395,7 @@ public class NER
 			orgMap.put(temp, (count == null) ? 1 : count + 1);
 		}
 		
-		// Location
+		// Hashing Location
 		Map<String, Integer> locMap = new HashMap<String, Integer>();
 		 
 		for (String temp : locList) 
@@ -404,7 +404,7 @@ public class NER
 			locMap.put(temp, (count == null) ? 1 : count + 1);
 		}
 		
-		// Person
+		// Hashing Person
 		Map<String, Integer> perMap = new HashMap<String, Integer>();
 		 
 		for (String temp : perList) 
@@ -414,66 +414,51 @@ public class NER
 		}
 		
 		// Print out Sorted Maps
+		// Print sorted Organisations
 		System.out.println("Organisation:");
 		Object[] o = orgMap.entrySet().toArray();
-	    Arrays.sort(o, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(
-		        ((Map.Entry<String, Integer>) o1).getValue()));
+	    Arrays.sort(o, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue()));
 	    for (Object e : o) 
 	    {
 	        System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "+ ((Map.Entry<String, Integer>) e).getValue());
 	    }
 	    System.out.println("\n");
 	    
+	    
+	    // Print sorted Locations
 	    System.out.println("Location:");
 	    Object[] l = locMap.entrySet().toArray();
-	    Arrays.sort(l, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(
-		        ((Map.Entry<String, Integer>) o1).getValue()));
+	    Arrays.sort(l, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue()));
 	    for (Object e : l) 
 	    {
 	        System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "+ ((Map.Entry<String, Integer>) e).getValue());
 	    }
 	    System.out.println("\n");
 	    
+	    
+	    //Print sorted Persons
 	    System.out.println("Person:");
 	    Object[] p = perMap.entrySet().toArray();
-	    Arrays.sort(p, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(
-		        ((Map.Entry<String, Integer>) o1).getValue()));
+	    Arrays.sort(p, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo( ((Map.Entry<String, Integer>) o1).getValue()));
 	    for (Object e : p) 
 	    {
 	        System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "+ ((Map.Entry<String, Integer>) e).getValue());
 	    }
 					
-		
-		
 	}
 	
 	public static void main(String[] args) throws IOException
 	{
 
 		NER chunker = new NER();
-		String para = "Casi cinco meses despu�s de lesionarse el menisco en Cornell�-El Prat, Raphael Varane est� a punto de reaparecer. "
-				+ "Podr�a hacerlo hoy mismo, en el Bernab�u, ante una afici�n que le a�ora m�s que nunca.La noticia surgi� ayer a las cuatro de la tarde. "
-				+ "Los jugadores del Real Madrid saltaban al terreno de juego para encarar el entrenamiento previo al partido de Champions y Bale no aparec�a "
-				+ "en el grupo. Estaban todos menos Xabi Alonso y el gal�s, que aquejado de unas molestias se quedaba en el gimnasio.La pizarra de Simeone volvi� a "
-				+ "funcionar. En el Atl�tico todo est� trabajado y las jugadas a bal�n parado cobran una importancia vital. En Do Dragao, una falta sacada por Gabi "
-				+ "sorprendi� a la defensa del Oporto. Se esperaba un disparo directo sobre la porter�a de Helton, pero Gabi dej� a Arda ante el portero con un pase"
-				+ ". El turco no lo desaprovech�. El gol del Atl�tico debi� ser anulado por Howard Webb, seg�n And�jar Oliver, porque Turan recibe la pelota de Gabi "
-				+ "en posici�n de fuera de juego aunque por escasos cent�metros. on estas palabras abandon� Xavi la zona mixta tras la victoria en Celtic Park por 0"
-				+ "-1. Se mostr� contento con el inicio de temporada del Barcelona, en el que lo han ganado todo por ahora."
-				+ " Rafael Nadal Parera (Manacor, Mallorca, 3 de junio de 1986), conocido tambi�n como Rafa Nadal, es un tenista espa�ol, actual n0 2 del ranking de "
-				+ "la ATP . Hasta la fecha, ha resultado campe�n en 13 torneos de Grand Slam, lo que supone ser el tercer jugador profesional con m�s t�tulos "
-				+ " \"grandes\" en la historia del tenis tras Pete Sampras y Roger Federer (17). El Arsenal, el Atl�tico Madrid y el Barcelona, igual que el Schalke"
-				+ ", subrayaron su dominio al obtener su segunda victoria en la Liga de Campeones, renacida para el Chelsea y el Borussia Dortmund, que ganaron con "
-				+ "autoridad sus respectivos compromisos despu�s de salir malparados de la primera jornada.La sesi�n dej� tocados al Steaua Bucarest, al Marsella y "
-				+ "al Celtic, sin puntos despu�s de los dos partidos jugados.";
-		//String para = "Rafael Nadal es un gran jugador. El FC Barcelona es uno de los mejores equipos del mundo.";
+		String para = "Rafael Nadal es un gran jugador. El FC Barcelona es uno de los mejores equipos del mundo.";
 		//System.out.println("----------------------\n");
 		Chunking chunks = chunker.process(para, 1);
 		//System.out.print(chunks);
 		
 		//Convert Paragraph Text to Vector in the format: word tag chunk
 		ArrayList<Element> elementList = createElementList(chunks);
-		writeToFile(elementList, "models/myTestFile");
+		writeToFile(elementList, "models/myTestFile"); // Writing the elementList to a file formatted for CRF++
 		
 		ArrayList<Element> loadedElementList = loadData("models/test_result_3");
 		clusterElements(loadedElementList);
