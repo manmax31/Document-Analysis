@@ -8,7 +8,10 @@
 
 package nlp.opennlp;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -17,6 +20,13 @@ import opennlp.tools.lang.english.Tokenizer;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import opennlp.tools.chunker.ChunkerME;
 import opennlp.tools.dictionary.Dictionary;
@@ -42,7 +52,7 @@ public class NER
 
 		// Load models for POS tagging
 		System.out.println("Loading models for POS Tagging...");
-		_tagger = new SharedPOSTagger("./models/postag/SpanishPOS.bin.gz",(Dictionary) null);
+		_tagger = new SharedPOSTagger("./models/postag/SpanishPOS.bin.gz", (Dictionary) null);
 
 		// Load models for Chunking
 		System.out.println("Loading models for Chunking...");
@@ -78,11 +88,8 @@ public class NER
 
 		public String[/* sent */][/* word */]            _tokens;
 		public String[/* sent */][/* word */][/* tag */] _taggings;
-		public ArrayList<ArrayList<ArrayList<String>>>   _chunks; // sent, chunk,
-																// token
-		public ArrayList<ArrayList<ArrayList<String>>>   _chunkLabels; // sent,
-																		// chunk,
-																		// token
+		public ArrayList<ArrayList<ArrayList<String>>>   _chunks;      // sent, chunk, token
+		public ArrayList<ArrayList<ArrayList<String>>>   _chunkLabels; // sent, chunk, token
 
 		public Pair addChunks(String[] tokens, String[] labels)
 		{
@@ -205,7 +212,7 @@ public class NER
 		String[][][]                            taggings    = chunkedData._taggings;
 		ArrayList<ArrayList<ArrayList<String>>> chunkLabels = chunkedData._chunkLabels;
 		
-		
+		// Adding word, tag to object Element
 		for (int si = 0; si < tokens.length; si++)
 		{
 			String[] sentence = tokens[si];
@@ -222,7 +229,7 @@ public class NER
 			}
 		}
 		
-		
+		// Adding chunklable to object Element
 		int elementIndex = 0;
 		for (ArrayList<ArrayList<String>> chunkSentence : chunkLabels)
 		{
@@ -237,21 +244,22 @@ public class NER
 					elementIndex++;
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		
-		for (Element element : elementList)
+		// Uncomment to print out the elements
+		/*for (Element element : elementList)
 		{
 			System.out.println(element.word + " " + element.tag + " " + element.chunk);
 		}
-		
+		*/
 		return elementList;
 
 	}
 	
-	public static void writeToFile(ArrayList<Element> elementList ) throws IOException
+	public static void writeToFile(ArrayList<Element> elementList, String filepath ) throws IOException
 	{
-		PrintWriter pw = new PrintWriter("models/myTestFile");
+		PrintWriter pw = new PrintWriter(filepath);
 		for (Element element : elementList)
 		{
 			pw.println(element.word + "\t" + element.tag + "\t" +  element.chunk);
@@ -259,7 +267,186 @@ public class NER
 		pw.close();
 		
 	}
-
+	
+	public static ArrayList<Element> loadData(String filepath) throws IOException
+	{
+		ArrayList<Element> elementList = new ArrayList<>();
+		
+		BufferedReader br =  new BufferedReader(new FileReader(filepath));
+		String line;
+		while ( (line = br.readLine()) != null)
+		{
+			String[] linearr = line.split("\t");
+			
+			// Input file contains 4 columns. E.g.: Sao	NC	B-LOC	B-LOC
+			if (linearr.length != 4)
+				continue;
+			
+			String  word              = linearr[0];
+			String  tag               = linearr[1];
+			String  predicted_chunk   = linearr[3];
+			
+			Element element = new Element(word, tag);
+			element.setChunk(predicted_chunk);
+			
+			elementList.add(element);
+			//System.out.println(linearr[0] + " " + linearr[1] + " " + linearr[2]);
+		}
+		br.close();
+		
+		return elementList;
+	}
+	
+	public static void printMap(Map<String, Integer> map)
+	{
+		 
+		for (Map.Entry<String, Integer> entry : map.entrySet()) 
+		{
+			System.out.println(entry.getKey() + "\t" + entry.getValue());
+		}
+	 
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void clusterElements(ArrayList<Element> elementList)
+	{
+		ArrayList<String> perList   = new ArrayList<>();
+		ArrayList<String> locList   = new ArrayList<>();
+		ArrayList<String> orgList   = new ArrayList<>();
+		
+		for (int i = 0; i < elementList.size(); i++)
+		{
+			Element rootElement = elementList.get(i);
+			String  rootWord    = rootElement.getWord();
+			String  rootChunk   = rootElement.getChunk();
+			
+		    // CLustering and joining words based on chunks
+			if (rootChunk.equals("B-LOC") )
+			{
+				int    ci         = i;
+				String wordarr    = rootWord;
+				
+				while(true)
+				{
+					ci++;
+					Element element   = elementList.get(ci);
+					String  chunk     = element.getChunk();
+					if ( chunk.equals("I-LOC"))
+					{
+						String word = element.getWord();
+						wordarr = wordarr + " " + word;
+					}
+					else
+						break;
+				}
+				locList.add(wordarr);
+			}
+			
+			if (rootChunk.equals("B-PER") )
+			{
+				int    ci         = i;
+				String wordarr    = rootWord;
+				
+				while(true)
+				{
+					ci++;
+					Element element   = elementList.get(ci);
+					String  chunk     = element.getChunk();
+					if ( chunk.equals("I-PER"))
+					{
+						String word = element.getWord();
+						wordarr = wordarr + " " + word;
+					}
+					else
+						break;	
+				}
+				perList.add(wordarr);
+			}
+			
+			if (rootChunk.equals("B-ORG") )
+			{
+				int    ci         = i;
+				String wordarr    = rootWord;
+				
+				while(true)
+				{
+					ci++;
+					Element element   = elementList.get(ci);
+					String  chunk     = element.getChunk();
+					if ( chunk.equals("I-ORG"))
+					{
+						String word = element.getWord();
+						wordarr = wordarr + " " + word;
+					}
+					else
+						break;
+				}
+				orgList.add(wordarr);
+			}	
+		}
+		
+		// Hash word and frequency of word
+		// Organisation
+		Map<String, Integer> orgMap = new HashMap<String, Integer>();
+		 
+		for (String temp : orgList) 
+		{
+			Integer count = orgMap.get(temp);
+			orgMap.put(temp, (count == null) ? 1 : count + 1);
+		}
+		
+		// Location
+		Map<String, Integer> locMap = new HashMap<String, Integer>();
+		 
+		for (String temp : locList) 
+		{
+			Integer count = locMap.get(temp);
+			locMap.put(temp, (count == null) ? 1 : count + 1);
+		}
+		
+		// Person
+		Map<String, Integer> perMap = new HashMap<String, Integer>();
+		 
+		for (String temp : perList) 
+		{
+			Integer count = perMap.get(temp);
+			perMap.put(temp, (count == null) ? 1 : count + 1);
+		}
+		
+		// Print out Sorted Maps
+		System.out.println("Organisation:");
+		Object[] o = orgMap.entrySet().toArray();
+	    Arrays.sort(o, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(
+		        ((Map.Entry<String, Integer>) o1).getValue()));
+	    for (Object e : o) 
+	    {
+	        System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "+ ((Map.Entry<String, Integer>) e).getValue());
+	    }
+	    System.out.println("\n");
+	    
+	    System.out.println("Location:");
+	    Object[] l = locMap.entrySet().toArray();
+	    Arrays.sort(l, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(
+		        ((Map.Entry<String, Integer>) o1).getValue()));
+	    for (Object e : l) 
+	    {
+	        System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "+ ((Map.Entry<String, Integer>) e).getValue());
+	    }
+	    System.out.println("\n");
+	    
+	    System.out.println("Person:");
+	    Object[] p = perMap.entrySet().toArray();
+	    Arrays.sort(p, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(
+		        ((Map.Entry<String, Integer>) o1).getValue()));
+	    for (Object e : p) 
+	    {
+	        System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "+ ((Map.Entry<String, Integer>) e).getValue());
+	    }
+					
+		
+		
+	}
+	
 	public static void main(String[] args) throws IOException
 	{
 
@@ -283,10 +470,13 @@ public class NER
 		//System.out.println("----------------------\n");
 		Chunking chunks = chunker.process(para, 1);
 		//System.out.print(chunks);
-		ArrayList<Element> elementList = createElementList(chunks);
-		writeToFile(elementList);
 		
-		//ArrayList<Element> data = createData(chunks);
+		//Convert Paragraph Text to Vector in the format: word tag chunk
+		ArrayList<Element> elementList = createElementList(chunks);
+		writeToFile(elementList, "models/myTestFile");
+		
+		ArrayList<Element> loadedElementList = loadData("models/test_result_3");
+		clusterElements(loadedElementList);
 		
 
 	}
